@@ -70,4 +70,6 @@ Thumbs.db
 # --------
 *.dll
 *.exe
+ihm_robot/*.pro
+ihm_robot/*.pro.user
 
