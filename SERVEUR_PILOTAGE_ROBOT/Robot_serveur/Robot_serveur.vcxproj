@@ -142,10 +142,12 @@
     <ClCompile Include="ev3dev.cpp" />
     <ClCompile Include="monprog.cpp" />
     <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="TCP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ev3dev.h" />
     <ClInclude Include="Robot.h" />
+    <ClInclude Include="TCP.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
