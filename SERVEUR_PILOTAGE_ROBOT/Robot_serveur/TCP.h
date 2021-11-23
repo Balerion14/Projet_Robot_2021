@@ -5,33 +5,64 @@
 #include <sys/un.h>
 #include <arpa/inet.h>
 
+//CLasse serveur TCP
 class TCP
 {
 private:
-
+	int sd_serveur{};
+	int sd_client{};
+	int port{};
+	bool activation{ false };
+	bool activation2{false};
 public:
 
 	/**
 	* Constructeur de la classe "TCP"
 	* Initialisation du serveur tcp.
-	* Auncun paramètre
+	* paramètre int qui correspond au numéro de port
 	*/
-	TCP();
+	TCP(int port);
 
 	/**
 	* Destructeur de la classe "TCP"
 	* Destruction des objets de la classe "TCP".
-	* Auncun paramètre
+	* Aucun paramètre
 	*/
 	~TCP();
 
 	/**
 	* Méthode de la classe "TCP"
-	* Configuration des paramètres de connexions de la classe "TCP".
+	* Création d'une socket de la classe "TCP".
 	* Auncun paramètre
 	*/
-	void Configuration_settings();
+	void creation_new_socket();
 
+	/**
+	* Méthode de la classe "TCP"
+	* Reception de la requete du client de la classe "TCP".
+	* Auncun paramètre
+	*/
+	std::string reception_requete_client();
 
+	/**
+	* Méthode de la classe "TCP"
+	* Envoi du message au client de la classe "TCP".
+	* Auncun paramètre
+	*/
+	std::string envoi_reponse_client(std::string requetes);
+
+	/**
+	* Méthode de la classe "TCP"
+	* Fermer socket  client de la classe "TCP".
+	* Auncun paramètre
+	*/
+	void close_socket_client();
+
+	/**
+	* Méthode de la classe "TCP"
+	* Fermer socket  serveur de la classe "TCP".
+	* Auncun paramètre
+	*/
+	void close_socket_serveur();
 };
 
