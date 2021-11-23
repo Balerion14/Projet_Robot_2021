@@ -29,7 +29,7 @@ void TCP::init()
 void TCP::creation_new_socket()
 {
 	//Tant que le bouton centrale n'est pas enfonce
-	while (this->activation == false)
+	while (activation == false)
 	{
 
 		// Dès qu’un nouveau client se connecte à notre serveur,
@@ -37,60 +37,67 @@ void TCP::creation_new_socket()
 		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
 		sd_client = accept(sd_serveur, NULL, NULL);
 
-		while (this->activation2 == false)
+		while (activation2 == false)
 		{
 			// Réception de la requête du client(decrypte)
-			std::string _reponse = this->reception_requete_client();
-			this->reponse = _reponse;
+			std::string _reponse = reception_requete_client();
+			reponse = _reponse;
 
 			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
-			while (this->activation3 == false)
+			while (activation3 == false)
 			{
-				if (this->reponse == "alpha-go")
+				if (reponse == "alpha-go")
 				{
-					this->activation3 == true;
-					this->reponse = "connecte";
-					this->envoi_reponse_client(reponse);
+					activation3 == true;
 					break;
 				}
 				else
 				{
-					this->reponse = "inconnu";
-					this->envoi_reponse_client(reponse);
+					reponse = "erreur";
+					envoi_reponse_client(reponse);
 					break;
 				}
 			}
 
 			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion
-			if (reponse == "deconnecte" && this->activation3 == true)
+			if (reponse == "deconnecte" && activation3 == true)
 			{
 				//Envoyer la réponse au client(deconnecte)
 				reponse = "deconnexion";
 
 				//Envoyer la réponse au client(informations capteurs)
-				this->envoi_reponse_client(reponse);
+				envoi_reponse_client(reponse);
 
 				//Faire parler le robot en disant"deconnection"
 				//..
 
 				//Sortir de la boucel while
-				this->activation2 = true;
+				activation2 = true;
 			}
 
 			//on verifie aussi qu'il a bien effectue la premiere connexion
-			else if(this->activation3 == true && this->activation2 != true)
+			else if(activation3 == true && reponse != "alpha-go" && activation2 != true)
 			{
 					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
 				    //...
 				    // Si ca c est bien passe, envoi "ok" sinon "erreur" + action effectue : "avance, recule, gauche, droite, tourner..." 
-					this->envoi_reponse_client(reponse);
+					envoi_reponse_client(reponse);
 
 					//Si la requete correspond à une demande d'information, alors appele methode robot pour recuperer informations
 					//...
 					// Si ca c est bien passe, envoi "ok" sinon "erreur" + les donnees
-					this->envoi_reponse_client(reponse);
+					envoi_reponse_client(reponse);
 				
 			}
+
+			//Si reponse est egale à alpha-go et activation3 vaut true
+			else if (activation3 == true && reponse == "alpha-go")
+			{
+				reponse = "connecte";
+				envoi_reponse_client(reponse);
+			}
+
+			//Sinon si activation ne vaut pas true alors on sort et on ferme client pour atteindre une nouvelle connexion
 			else
 			{
 				//Sortir de la boucle while
@@ -99,19 +106,19 @@ void TCP::creation_new_socket()
 		}
 
 		//Reactivation de activation2 pour re-rentrer dans boucle
-		this->activation2 = false;
+		activation2 = false;
 
 		//Reactivation de activation3 pour re faire le test de la premiere connexion
-		this->activation3 == false;
+		activation3 == false;
 
 		//fermeture client pour en attendre un autre
-		this->close_socket_client();
+		close_socket_client();
 
 		//Si le bouton centrale est enfonce alors on ferme le socket et fin
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
-			this->close_socket_serveur();
-			this->activation = true;
+			close_socket_serveur();
+			activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
 			//...123
