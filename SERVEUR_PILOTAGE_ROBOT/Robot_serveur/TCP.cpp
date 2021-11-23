@@ -22,24 +22,16 @@ void TCP::creation_new_socket()
 {
 	while (1)
 	{
-		// Dès qu’un nouveau client se connecte à notre serveur,
-		// une nouvelle socket est créée pour gérer le client
-		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
-		sd_client = accept(sd_serveur, NULL, NULL);
-
-		// Réception de la requête du client(decrypte)
-		std::string reponse = this->reception_requete_client();
-
-		//Si le message est welcome(par securite que notre ip a voir..), alors on precise que la connexion est établie et on ferme le socket pour etre pret à écouter notre client
-		//Fermeture de la socket du client qui vient d'etre cree si le message recu vaut "quit" == qu'il est deconnecté et par la suite fermeture du socket serveur(a voire avec prof?)
-
 		//Si activation == false, sa veut dire que c est la premiere connexion donc on attent un mot de passe specifique pour se connecter au serveur afin de controler le robot
 		//tant que ce n est pas welcome, alors le serveur sera en ecoute mais renverrant en reponse "erreur"
 		//Si c est bon alors il renverra "connecte" et on quitera la boucle pour un session normale
 		while (this->activation == false)
 		{
+			//Passage à false pour la remise à 0 de la valeur 
+			this->activation3 = false;
+
 			// une nouvelle socket est créée pour gérer le client
-		    //accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
+			//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
 			sd_client = accept(sd_serveur, NULL, NULL);
 
 			// Réception de la requête du client(decrypte)
@@ -49,7 +41,6 @@ void TCP::creation_new_socket()
 			if (reponse == "welcome")
 			{
 				this->activation == true;
-				this->activation2 == true;
 				std::cout << "Connexion etabli entre le serveur et le client" << std::endl;
 
 				//Envoyer la réponse au client(informations capteurs)
@@ -71,9 +62,26 @@ void TCP::creation_new_socket()
 		}
 
 		//Si la premiere connexion est passée alors on peut effectue ces actions
-		if (this->activation2 == false)//false a voir
+		if (this->activation2 == true)//
 		{
-			//if (reponse == "quit") { std::cout << "Connexion interrrompu entre le serveur et le client" << std::endl; this->close_socket_client(); break; }
+		    // Dès qu’un nouveau client se connecte à notre serveur,
+			// une nouvelle socket est créée pour gérer le client
+			//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
+			sd_client = accept(sd_serveur, NULL, NULL);
+
+			// Réception de la requête du client(decrypte)
+			std::string reponse = this->reception_requete_client();
+
+			//Si la trame vaut "quite" alors c est la déconnexion et donc il faudra se reconnecter avec welcome
+			if (reponse == "quit")
+			{
+				this->activation3 = true;
+				this->activation2 = false;
+				this->activation = false;
+				reponse = "deconnecte";
+				std::cout << "Connexion interrrompu entre le serveur et le client" << std::endl; 
+				this->close_socket_client();
+			}
 
 			//Traduire la réponse pour savoir ce que doit faire le robot(appel classe robot)
 			//...
@@ -88,6 +96,13 @@ void TCP::creation_new_socket()
 			this->close_socket_client();
 
 			//Rebouclage en attente de clients(socket serveur fermer)
+		}
+
+		//Verification pour voir si l'utilisateur vient de quiter, alors
+		if (this->activation3 != true)
+		{
+			//Passage à true apres avoir effectué la premiere connection
+			this->activation2 == true;
 		}
 	}
 }

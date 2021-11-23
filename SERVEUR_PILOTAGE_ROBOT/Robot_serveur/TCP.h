@@ -14,6 +14,7 @@ private:
 	int port{};
 	bool activation{ false };
 	bool activation2{false};
+	bool activation3{ false };
 public:
 
 	/**
