@@ -2,6 +2,9 @@
 
 TCP::TCP(int port)
 {
+	//Initialisation pointeur
+	init();
+
 	// Création de la socket serveur
 	sd_serveur = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -18,76 +21,100 @@ TCP::TCP(int port)
 	listen(sd_serveur, 5);
 }
 
+void TCP::init()
+{
+	robot = new Robot();
+}
+
 void TCP::creation_new_socket()
 {
-	while (1)
+	//Tant que le bouton centrale n'est pas enfonce
+	while (this->activation == false)
 	{
+
 		// Dès qu’un nouveau client se connecte à notre serveur,
 		// une nouvelle socket est créée pour gérer le client
 		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
 		sd_client = accept(sd_serveur, NULL, NULL);
 
-		// Réception de la requête du client(decrypte)
-		std::string reponse = this->reception_requete_client();
-
-		//Si le message est welcome(par securite que notre ip a voir..), alors on precise que la connexion est établie et on ferme le socket pour etre pret à écouter notre client
-		//Fermeture de la socket du client qui vient d'etre cree si le message recu vaut "quit" == qu'il est deconnecté et par la suite fermeture du socket serveur(a voire avec prof?)
-
-		//Si activation == false, sa veut dire que c est la premiere connexion donc on attent un mot de passe specifique pour se connecter au serveur afin de controler le robot
-		//tant que ce n est pas welcome, alors le serveur sera en ecoute mais renverrant en reponse "erreur"
-		//Si c est bon alors il renverra "connecte" et on quitera la boucle pour un session normale
-		while (this->activation == false)
+		while (this->activation2 == false)
 		{
-			// une nouvelle socket est créée pour gérer le client
-		    //accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
-			sd_client = accept(sd_serveur, NULL, NULL);
-
 			// Réception de la requête du client(decrypte)
-			std::string reponse = this->reception_requete_client();
+			std::string _reponse = this->reception_requete_client();
+			this->reponse = _reponse;
 
-			//si reponse == welcome alors activation == true
-			if (reponse == "welcome")
+			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
+			while (this->activation3 == false)
 			{
-				this->activation == true;
-				this->activation2 == true;
-				std::cout << "Connexion etabli entre le serveur et le client" << std::endl;
-
-				//Envoyer la réponse au client(informations capteurs)
-				reponse = "connecte";
-				this->envoi_reponse_client(reponse);
-
-				//Fermeture du socket client pour etre en attente d'un nouveau
-				this->close_socket_client();
-
-				break;
+				if (this->reponse == "alpha-go")
+				{
+					this->activation3 == true;
+					this->reponse = "connecte";
+					this->envoi_reponse_client(reponse);
+					break;
+				}
+				else
+				{
+					this->reponse = "inconnu";
+					this->envoi_reponse_client(reponse);
+					break;
+				}
 			}
 
-			//Envoyer la réponse au client(informations capteurs)
-			reponse = "erreur";
-			this->envoi_reponse_client(reponse);
+			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion
+			if (reponse == "deconnecte" && this->activation3 == true)
+			{
+				//Envoyer la réponse au client(deconnecte)
+				reponse = "deconnexion";
 
-			//Fermeture du socket client pour etre en attente d'un nouveau
-			this->close_socket_client();
+				//Envoyer la réponse au client(informations capteurs)
+				this->envoi_reponse_client(reponse);
+
+				//Faire parler le robot en disant"deconnection"
+				//..
+
+				//Sortir de la boucel while
+				this->activation2 = true;
+			}
+
+			//on verifie aussi qu'il a bien effectue la premiere connexion
+			else if(this->activation3 == true)
+			{
+					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
+				    //...
+				    // Si ca c est bien passe, envoi "ok" sinon "erreur" + action effectue : "avance, recule, gauche, droite, tourner..." 
+					this->envoi_reponse_client(reponse);
+
+					//Si la requete correspond à une demande d'information, alors appele methode robot pour recuperer informations
+					//...
+					// Si ca c est bien passe, envoi "ok" sinon "erreur" + les donnees
+					this->envoi_reponse_client(reponse);
+				
+			}
+			else
+			{
+				//Sortir de la boucle while
+				break;
+			}
 		}
 
-		//Si la premiere connexion est passée alors on peut effectue ces actions
-		if (this->activation2 == false)//false a voir
+		//Reactivation de activation2 pour re-rentrer dans boucle
+		this->activation2 = false;
+
+		//Reactivation de activation3 pour re faire le test de la premiere connexion
+		this->activation3 == false;
+
+		//fermeture client pour en attendre un autre
+		this->close_socket_client();
+
+		//Si le bouton centrale est enfonce alors on ferme le socket et fin
+		if (robot->recupererEtatBoutonCentral() == true)
 		{
-			//if (reponse == "quit") { std::cout << "Connexion interrrompu entre le serveur et le client" << std::endl; this->close_socket_client(); break; }
-
-			//Traduire la réponse pour savoir ce que doit faire le robot(appel classe robot)
-			//...
-
-			//Récuperers informations des capteurs et les stockers dans la variables locale "reponse" en remplacant sa valeurs d'origine
-			//...
-
-			//Envoyer la réponse au client(informations capteurs)
-			this->envoi_reponse_client(reponse);
-
-			//Fermeture du socket client pour etre en attente d'un nouveau
-			this->close_socket_client();
-
-			//Rebouclage en attente de clients(socket serveur fermer)
+			this->close_socket_serveur();
+			this->activation = true;
+			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
+			//Si on le reutilise il faut le rallumer pour remettre à 0
+			//...123
 		}
 	}
 }
@@ -106,7 +133,7 @@ std::string TCP::reception_requete_client()
 std::string TCP::envoi_reponse_client(std::string requetes)
 {
 	// Envoi de la réponse au client
-	std::string requete = "Hello world!";
+	std::string requete = requetes;
 	send(sd_client, requete.c_str(), requete.size(), 0);
 }
 
@@ -124,6 +151,7 @@ void TCP::close_socket_serveur()
 
 TCP::~TCP()
 {
+	delete robot;
 }
 
 
