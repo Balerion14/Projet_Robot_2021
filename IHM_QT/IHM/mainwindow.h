@@ -15,7 +15,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void load_image();
+    void init_image();
+    void display_image();
+
 private:
     Ui::MainWindow *ui;
+    QImage *pBackground;
+    QImage *pBanderole;
+    QPixmap image;
 };
 #endif // MAINWINDOW_H
