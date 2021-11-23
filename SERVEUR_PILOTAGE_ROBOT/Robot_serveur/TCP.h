@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <sys/un.h>
 #include <arpa/inet.h>
+#include "Robot.h"
 
 //CLasse serveur TCP
 class TCP
@@ -12,9 +13,15 @@ private:
 	int sd_serveur{};
 	int sd_client{};
 	int port{};
+	std::string reponse{};
 	bool activation{ false };
 	bool activation2{false};
 	bool activation3{ false };
+	bool activation4{ false };
+	bool activation5{ false };
+	bool activation6{ false };
+	bool activation7{ false };
+	Robot* robot;
 public:
 
 	/**
@@ -30,6 +37,13 @@ public:
 	* Aucun paramètre
 	*/
 	~TCP();
+
+	/**
+	* Methode de la classe "TCP"
+	* Allocation dynamique des objets de la classe "TCP".
+	* Aucun paramètre
+	*/
+	void init();
 
 	/**
 	* Méthode de la classe "TCP"
