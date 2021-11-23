@@ -35,6 +35,9 @@
 #include <functional>
 #include <memory>
 
+using namespace std;
+
+
 namespace ev3dev {
 
     //-----------------------------------------------------------------------------
