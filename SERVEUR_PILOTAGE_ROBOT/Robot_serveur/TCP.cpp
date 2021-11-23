@@ -78,7 +78,7 @@ void TCP::creation_new_socket()
 			}
 
 			//on verifie aussi qu'il a bien effectue la premiere connexion
-			else if(this->activation3 == true)
+			else if(this->activation3 == true && this->activation2 != true)
 			{
 					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
 				    //...
