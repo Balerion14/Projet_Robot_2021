@@ -6,6 +6,19 @@
 #include <arpa/inet.h>
 #include "Robot.h"
 
+//structure de données
+typedef struct Donnee
+{
+	bool activation{ false };
+	bool activation2{ false };
+	bool activation3{ false };
+	bool activation4{ false };
+	bool activation5{ false };
+	bool activation6{ false };
+	bool activation7{ false };
+	int compteur_tour{0};
+};
+
 //CLasse serveur TCP
 class TCP
 {
@@ -14,14 +27,8 @@ private:
 	int sd_client{};
 	int port{};
 	std::string reponse{};
-	bool activation{ false };
-	bool activation2{false};
-	bool activation3{ false };
-	bool activation4{ false };
-	bool activation5{ false };
-	bool activation6{ false };
-	bool activation7{ false };
 	Robot* robot;
+	Donnee* donnee;
 public:
 
 	/**

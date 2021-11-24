@@ -364,3 +364,9 @@ void Robot::recupererPositionsDesMoteurs(int& positionGauche, int& positionCentr
 	positionDroite = pMoteurDroit->position();
 }
 
+float Robot::recup_frequence(float _frequence)
+{
+	frequence = _frequence;
+	return frequence;
+}
+
