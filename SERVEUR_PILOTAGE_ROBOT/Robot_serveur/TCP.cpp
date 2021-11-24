@@ -24,31 +24,31 @@ TCP::TCP(int port)
 void TCP::init()
 {
 	robot = new Robot();
+	donnee = new Donnee();
 }
 
 void TCP::creation_new_socket()
 {
 	//Tant que le bouton centrale n'est pas enfonce
-	while (activation == false)
+	while (donnee->activation == false)
 	{
-
 		// Dès qu’un nouveau client se connecte à notre serveur,
 		// une nouvelle socket est créée pour gérer le client
 		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
 		sd_client = accept(sd_serveur, NULL, NULL);
 
-		while (activation2 == false)
+		while (donnee->activation2 == false)
 		{
 			// Réception de la requête du client(decrypte)
 			std::string _reponse = reception_requete_client();
 			reponse = _reponse;
 
 			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
-			while (activation3 == false)
+			while (donnee->activation3 == false)
 			{
 				if (reponse == "alpha-go")
 				{
-					activation3 == true;
+					donnee->activation3 == true;
 					break;
 				}
 				else
@@ -60,7 +60,7 @@ void TCP::creation_new_socket()
 			}
 
 			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion
-			if (reponse == "deconnecte" && activation3 == true)
+			if (reponse == "deconnecte" && donnee->activation3 == true)
 			{
 				//Envoyer la réponse au client(deconnecte)
 				reponse = "deconnexion";
@@ -69,14 +69,17 @@ void TCP::creation_new_socket()
 				envoi_reponse_client(reponse);
 
 				//Faire parler le robot en disant"deconnection"
-				//..
+				robot->parler(reponse, true);
 
 				//Sortir de la boucel while
-				activation2 = true;
+				donnee->activation2 = true;
+
+				//Sortie boucle
+				break;
 			}
 
 			//on verifie aussi qu'il a bien effectue la premiere connexion
-			else if(activation3 == true && reponse != "alpha-go" && activation2 != true)
+			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && donnee->activation2 != true)
 			{
 					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
 				    //...
@@ -91,25 +94,60 @@ void TCP::creation_new_socket()
 			}
 
 			//Si reponse est egale à alpha-go et activation3 vaut true
-			else if (activation3 == true && reponse == "alpha-go")
+			else if (donnee->activation3 == true && reponse == "alpha-go")
 			{
-				reponse = "connecte";
+				//Envoi reponse pour dire qu'il est connecter
+				reponse = "connection";
 				envoi_reponse_client(reponse);
+
+				//Faire parler le robot en disant"connection"
+				robot->parler(reponse, true);
 			}
 
-			//Sinon si activation ne vaut pas true alors on sort et on ferme client pour atteindre une nouvelle connexion
+			//Si il ne se passe aucune action donc que aucune des conditions n'est été utilisé alors on attend 20 seconde
 			else
 			{
-				//Sortir de la boucle while
-				break;
+				//Compteur tour pour gerer le temps
+				donnee->compteur_tour++;
+
+				//Si le compteur est entre 10 inclut et 13 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps
+				if (donnee->compteur_tour >= 10 && donnee->compteur_tour < 13)
+				{
+					//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
+					reponse = "deconnexion_proche";
+					envoi_reponse_client(reponse);
+
+					//Faire parler le robot en disant"deconnection"
+					robot->parler(reponse, false);
+
+					//Pause dans le programme grace à un thread
+					robot->attendre(10);
+				}
+
+				//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante
+				else
+				{
+					//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
+					reponse = "deconnexion_delai_depasse";
+					envoi_reponse_client(reponse);
+
+					//Faire parler le robot en disant"deconnection"
+					robot->parler(reponse, false);
+
+					//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
+					break;
+				}
 			}
 		}
 
 		//Reactivation de activation2 pour re-rentrer dans boucle
-		activation2 = false;
+		donnee->activation2 = false;
 
 		//Reactivation de activation3 pour re faire le test de la premiere connexion
-		activation3 == false;
+		donnee->activation3 == false;
+
+		//remise à 0 du compteur
+		donnee->compteur_tour = 0;
 
 		//fermeture client pour en attendre un autre
 		close_socket_client();
@@ -118,10 +156,10 @@ void TCP::creation_new_socket()
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
 			close_socket_serveur();
-			activation = true;
+			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123
+			//...123v4
 		}
 	}
 }

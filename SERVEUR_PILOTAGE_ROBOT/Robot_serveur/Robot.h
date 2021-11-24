@@ -43,8 +43,6 @@ public:
 	 */
 	~Robot();
 
-
-
 	/**
 	 * Méthode pour attendre pendant un certain temps exprimé en millisecondes
 	 * @param delai_en_millisecondes
@@ -319,8 +317,13 @@ public:
 	 * @return rien
 	 */
 	void recupererPositionsDesMoteurs(int& positionGauche, int& positionCentre, int& positionDroite);
-
-
+	
+	/**
+	 * Méthode pour récupérer attribut frequence
+	 * @auncun parametre
+	 * @return la frequence
+	 */
+	float recup_frequence(float _frequence);
 
 private:
 	// Attributs capteurs
@@ -336,6 +339,9 @@ private:
 	large_motor* pMoteurGauche;		// sur port A
 	large_motor* pMoteurDroit;		// sur port C
 	medium_motor* pMoteurCentral;	// sur port B
+
+	//Attribut 
+	float frequence{};
 };
 
 
