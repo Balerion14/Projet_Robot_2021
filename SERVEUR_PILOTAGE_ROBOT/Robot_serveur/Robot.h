@@ -15,6 +15,8 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <iostream>
+#include <sstream>
 #include "ev3dev.h"
 
 // Espaces de noms utilisés
@@ -22,14 +24,14 @@ using namespace std;
 using namespace ev3dev;
 
 //Creation de macro associer à des valeurs qui correspondent à des actions
-#define AVANCER Z;
-#define RECULER S;
-#define GAUCHES Q;
-#define DROITES D;
-#define STOP C;
-#define RAISE_ARM A;
-#define GO_DOWN_ARM E;
-#define SEND_INFOS capteur;
+#define AVANCER 'Z'
+#define RECULER 'S'
+#define GAUCHES 'Q'
+#define DROITES 'D'
+#define STOP 'C'
+#define RAISE_ARM 'A'
+#define GO_DOWN_ARM 'E'
+#define SEND_INFOS 'T'
 
 
 // Définition de la classe
@@ -349,7 +351,7 @@ public:
 	* std::array
 	* return rien
 	*/
-	std::string transforme_CSV(std::array<int, 5> & const);
+	std::string transforme_CSV(const std::array<int, 5> & n);
 
 	/**
 	* Méthode de la classe "Robot"

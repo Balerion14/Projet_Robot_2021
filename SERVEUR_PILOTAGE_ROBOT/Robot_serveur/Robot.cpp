@@ -375,15 +375,29 @@ void Robot::do_action_robot(std::string requete)
 	//...
 }
 
-std::string Robot::transforme_CSV(std::array<int, 5>& const)
+std::string Robot::transforme_CSV(const std::array<int, 5> & n)
 {
-	//...
+	// Construction de la chaîne de caractères en mémoire
+	ostringstream preparation;
+	//preparation << n.get(0) << ";" << n[1]<< ";"<< n[2]<< ";"<<n[3]<< ";" << n[4] << ";";
+
+	// Transformation de la chaîne préparée en string
+	string chaine = preparation.str();
 }
 
 
 bool Robot::evaluate_action_robot(std::string requete)
 {
-	//...
+	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère les infos du capteur
+	if (requete[0] == SEND_INFOS)
+	{
+		Renvoi_infos_capteur();
+	}
+	//Sinon on fait appelle à la methode qui gère les actions du robot
+	else
+	{
+		do_action_robot(requete);
+	}
 }
 
 float Robot::recup_frequence(float _frequence)
