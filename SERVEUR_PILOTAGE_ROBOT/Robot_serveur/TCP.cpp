@@ -62,7 +62,13 @@ void TCP::creation_new_socket()
 				}
 			}
 
-			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion
+			//Verification si le robot veut une connexion en continu(connexion force->IHM)
+			if (reponse == "connexion-force" && donnee->activation4 == false)
+			{
+				donnee->activation4 == true;
+			}
+
+			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion 
 			if (reponse == "deconnecte" && donnee->activation3 == true)
 			{
 				//Envoyer la réponse au client(deconnecte)
@@ -81,8 +87,8 @@ void TCP::creation_new_socket()
 				break;
 			}
 
-			//on verifie aussi qu'il a bien effectue la premiere connexion
-			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && donnee->activation2 != true)
+			//on verifie aussi qu'il a bien effectue la premiere connexion 
+			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true)
 			{
 					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
 				    //...
@@ -96,7 +102,7 @@ void TCP::creation_new_socket()
 				
 			}
 
-			//Si reponse est egale à alpha-go et activation3 vaut true
+			//Si reponse est egale à alpha-go et activation3 vaut true 
 			else if (donnee->activation3 == true && reponse == "alpha-go")
 			{
 				//Envoi reponse pour dire qu'il est connecter
@@ -113,32 +119,43 @@ void TCP::creation_new_socket()
 				//Compteur tour pour gerer le temps
 				donnee->compteur_tour++;
 
-				//Si le compteur est entre 1 inclut et 5 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps pour laisser la place aux autre et eviter de surcharger la bande passante
-				if (donnee->compteur_tour >= 1 && donnee->compteur_tour < 5)
+				//Verification globale si il veut ou pas une connnexion en continue
+				if (donnee->activation4 == false)
 				{
-					//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
-					reponse = "deconnexion_proche";
-					envoi_reponse_client(reponse);
+					//Si le compteur est entre 1 inclut et 5 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps pour laisser la place aux autre et eviter de surcharger la bande passante
+					if (donnee->compteur_tour >= 1 && donnee->compteur_tour < 5)
+					{
+						//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
+						reponse = "deconnexion_proche";
+						envoi_reponse_client(reponse);
 
-					//Faire parler le robot en disant"deconnection"
-					robot->parler(reponse, true);
+						//Faire parler le robot en disant"deconnection"
+						robot->parler(reponse, true);
 
-					//Pause dans le programme grace à un thread
-					robot->attendre(10);
+						//Pause dans le programme grace à un thread
+						robot->attendre(10);
+					}
+
+					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante
+					else
+					{
+						//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
+						reponse = "deconnexion_delai_depasse";
+						envoi_reponse_client(reponse);
+
+						//Faire parler le robot en disant"deconnection"
+						robot->parler(reponse, true);
+
+						//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
+						break;
+					}
 				}
 
-				//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante
+				//Si c est à true alors on envoi reponse comme quoi on est bien en mode connexion force
 				else
 				{
-					//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
-					reponse = "deconnexion_delai_depasse";
+					reponse = "connexion_force_active";
 					envoi_reponse_client(reponse);
-
-					//Faire parler le robot en disant"deconnection"
-					robot->parler(reponse, true);
-
-					//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
-					break;
 				}
 			}
 		}
@@ -147,7 +164,10 @@ void TCP::creation_new_socket()
 		donnee->activation2 = false;
 
 		//Reactivation de activation3 pour re faire le test de la premiere connexion
-		donnee->activation3 == false;
+		donnee->activation3 = false;
+
+		//Reactivation du bouton force connexion
+		donnee->activation4 = false;
 
 		//remise à 0 du compteur
 		donnee->compteur_tour = 0;
@@ -162,7 +182,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5
+			//...123v4v5v6.1
 		}
 	}
 }
