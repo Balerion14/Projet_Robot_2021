@@ -63,13 +63,13 @@ void TCP::creation_new_socket()
 			}
 
 			//Verification si le robot veut une connexion en continu(connexion force->IHM)
-			if (reponse == "connexion-force")
+			if (reponse == "connexion-force" && donnee->activation4 == false)
 			{
 				donnee->activation4 == true;
 			}
 
-			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion + qu'il ne demande pas de connexion force
-			if (reponse == "deconnecte" && donnee->activation3 == true && donnee->activation4 != true)
+			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion 
+			if (reponse == "deconnecte" && donnee->activation3 == true)
 			{
 				//Envoyer la réponse au client(deconnecte)
 				reponse = "deconnexion";
@@ -87,8 +87,8 @@ void TCP::creation_new_socket()
 				break;
 			}
 
-			//on verifie aussi qu'il a bien effectue la premiere connexion + qu'il ne demande pas de connexion force
-			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && donnee->activation2 != true && donnee->activation4 != true)
+			//on verifie aussi qu'il a bien effectue la premiere connexion 
+			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true)
 			{
 					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
 				    //...
@@ -102,8 +102,8 @@ void TCP::creation_new_socket()
 				
 			}
 
-			//Si reponse est egale à alpha-go et activation3 vaut true + qu'il ne demande pas de connexion force
-			else if (donnee->activation3 == true && reponse == "alpha-go" && donnee->activation4 != true)
+			//Si reponse est egale à alpha-go et activation3 vaut true 
+			else if (donnee->activation3 == true && reponse == "alpha-go")
 			{
 				//Envoi reponse pour dire qu'il est connecter
 				reponse = "connection";
@@ -164,7 +164,10 @@ void TCP::creation_new_socket()
 		donnee->activation2 = false;
 
 		//Reactivation de activation3 pour re faire le test de la premiere connexion
-		donnee->activation3 == false;
+		donnee->activation3 = false;
+
+		//Reactivation du bouton force connexion
+		donnee->activation4 = false;
 
 		//remise à 0 du compteur
 		donnee->compteur_tour = 0;
@@ -179,7 +182,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v
+			//...123v4v5v6.1
 		}
 	}
 }
