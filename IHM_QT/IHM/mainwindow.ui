@@ -50,6 +50,9 @@
     <property name="text">
      <string>Avancer (Forward)</string>
     </property>
+    <property name="shortcut">
+     <string>Z</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
@@ -68,6 +71,9 @@
     </property>
     <property name="text">
      <string>Arrêter (Stop)</string>
+    </property>
+    <property name="shortcut">
+     <string>Esc</string>
     </property>
    </widget>
    <widget class="QPushButton" name="down_button">
@@ -88,6 +94,9 @@
     <property name="text">
      <string>Reculer (Backward)</string>
     </property>
+    <property name="shortcut">
+     <string>S</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="left_button">
     <property name="geometry">
@@ -107,6 +116,9 @@
     <property name="text">
      <string>Gauche (Left)</string>
     </property>
+    <property name="shortcut">
+     <string>Q</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="right_button">
     <property name="geometry">
@@ -125,6 +137,9 @@
     </property>
     <property name="text">
      <string>Droite (Right)</string>
+    </property>
+    <property name="shortcut">
+     <string>D</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="input_ip">
@@ -284,6 +299,9 @@ p, li { white-space: pre-wrap; }
     <property name="text">
      <string>Lever (Up)</string>
     </property>
+    <property name="shortcut">
+     <string>Up</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
@@ -304,6 +322,48 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>Dessendre (Down)</string>
+    </property>
+    <property name="shortcut">
+     <string>Down</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="img_angle">
+    <property name="geometry">
+     <rect>
+      <x>1025</x>
+      <y>625</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="img_posit">
+    <property name="geometry">
+     <rect>
+      <x>1375</x>
+      <y>625</y>
+      <width>150</width>
+      <height>150</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_co">
+    <property name="geometry">
+     <rect>
+      <x>1025</x>
+      <y>140</y>
+      <width>500</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

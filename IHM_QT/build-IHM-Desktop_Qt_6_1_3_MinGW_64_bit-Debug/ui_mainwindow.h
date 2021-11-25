@@ -39,6 +39,9 @@ public:
     QLabel *txt_dst_obstacle;
     QPushButton *high_Button;
     QPushButton *pushButton;
+    QLabel *img_angle;
+    QLabel *img_posit;
+    QLabel *label_co;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -128,6 +131,15 @@ public:
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(1375, 350, 150, 75));
         pushButton->setFont(font6);
+        img_angle = new QLabel(centralwidget);
+        img_angle->setObjectName(QString::fromUtf8("img_angle"));
+        img_angle->setGeometry(QRect(1025, 625, 150, 150));
+        img_posit = new QLabel(centralwidget);
+        img_posit->setObjectName(QString::fromUtf8("img_posit"));
+        img_posit->setGeometry(QRect(1375, 625, 150, 150));
+        label_co = new QLabel(centralwidget);
+        label_co->setObjectName(QString::fromUtf8("label_co"));
+        label_co->setGeometry(QRect(1025, 140, 500, 100));
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
@@ -140,10 +152,25 @@ public:
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         label_background->setText(QString());
         up_button->setText(QCoreApplication::translate("MainWindow", "Avancer (Forward)", nullptr));
+#if QT_CONFIG(shortcut)
+        up_button->setShortcut(QCoreApplication::translate("MainWindow", "Z", nullptr));
+#endif // QT_CONFIG(shortcut)
         pushButton_2->setText(QCoreApplication::translate("MainWindow", "Arr\303\252ter (Stop)", nullptr));
+#if QT_CONFIG(shortcut)
+        pushButton_2->setShortcut(QCoreApplication::translate("MainWindow", "Esc", nullptr));
+#endif // QT_CONFIG(shortcut)
         down_button->setText(QCoreApplication::translate("MainWindow", "Reculer (Backward)", nullptr));
+#if QT_CONFIG(shortcut)
+        down_button->setShortcut(QCoreApplication::translate("MainWindow", "S", nullptr));
+#endif // QT_CONFIG(shortcut)
         left_button->setText(QCoreApplication::translate("MainWindow", "Gauche (Left)", nullptr));
+#if QT_CONFIG(shortcut)
+        left_button->setShortcut(QCoreApplication::translate("MainWindow", "Q", nullptr));
+#endif // QT_CONFIG(shortcut)
         right_button->setText(QCoreApplication::translate("MainWindow", "Droite (Right)", nullptr));
+#if QT_CONFIG(shortcut)
+        right_button->setShortcut(QCoreApplication::translate("MainWindow", "D", nullptr));
+#endif // QT_CONFIG(shortcut)
         input_ip->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -161,7 +188,16 @@ public:
         txt_snirium->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXXXXX", nullptr));
         txt_dst_obstacle->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXXXXX", nullptr));
         high_Button->setText(QCoreApplication::translate("MainWindow", "Lever (Up)", nullptr));
+#if QT_CONFIG(shortcut)
+        high_Button->setShortcut(QCoreApplication::translate("MainWindow", "Up", nullptr));
+#endif // QT_CONFIG(shortcut)
         pushButton->setText(QCoreApplication::translate("MainWindow", "Dessendre (Down)", nullptr));
+#if QT_CONFIG(shortcut)
+        pushButton->setShortcut(QCoreApplication::translate("MainWindow", "Down", nullptr));
+#endif // QT_CONFIG(shortcut)
+        img_angle->setText(QString());
+        img_posit->setText(QString());
+        label_co->setText(QString());
     } // retranslateUi
 
 };

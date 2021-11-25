@@ -24,6 +24,10 @@ private:
     Ui::MainWindow *ui;
     QImage *pBackground;
     QImage *pBanderole;
+    QImage *pAngle;
+    QImage *pPosition;
+    QImage *pConnected;
+    QImage *pDisconnected;
     QPixmap image;
 };
 #endif // MAINWINDOW_H
