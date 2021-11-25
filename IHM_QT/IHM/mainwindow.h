@@ -59,7 +59,6 @@ private:
     Ui::MainWindow *ui;
     QTcpSocket *tcpSocket;
     QTimer *pTimer;
-    QTimer *pTimer2;
     data_received *donnee_recue;
 
     // Picture part
@@ -70,5 +69,7 @@ private:
     QImage *pConnected;
     QImage *pDisconnected;
     QPixmap image;
+
+    bool verif1 = false;
 };
 #endif // MAINWINDOW_H

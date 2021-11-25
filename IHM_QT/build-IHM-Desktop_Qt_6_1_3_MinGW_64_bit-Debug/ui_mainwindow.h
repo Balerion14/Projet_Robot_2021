@@ -56,7 +56,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         label_background = new QLabel(centralwidget);
         label_background->setObjectName(QString::fromUtf8("label_background"));
-        label_background->setGeometry(QRect(10, 10, 1920, 1080));
+        label_background->setGeometry(QRect(0, 0, 1920, 1080));
         up_button = new QPushButton(centralwidget);
         up_button->setObjectName(QString::fromUtf8("up_button"));
         up_button->setGeometry(QRect(1200, 275, 150, 150));

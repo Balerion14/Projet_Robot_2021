@@ -24,18 +24,13 @@ MainWindow::MainWindow(QWidget *parent)
     // Association du "tick" du timer à l'appel d'une méthode SLOT
     connect(pTimer, SIGNAL(timeout()), this, SLOT(on_connect_forced_clicked()));
 
-    // Association du "tick" du timer à l'appel d'une méthode SLOT
-    connect(pTimer2, SIGNAL(timeout()), this, SLOT(on_connect_forced_clicked()));
-
     // Idem pour les erreurs
     connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(afficher_erreur(QAbstractSocket::SocketError)));
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     delete pTimer;
-    delete pTimer2;
     delete pBackground;
     delete pBanderole;
     delete pPosition;
@@ -43,6 +38,8 @@ MainWindow::~MainWindow()
     delete pConnected;
     delete pDisconnected;
     delete donnee_recue;
+    delete tcpSocket;
+    delete ui;
 }
 
 
@@ -57,6 +54,9 @@ void MainWindow::init_image()
     pConnected = new QImage();
     pDisconnected = new QImage();
     donnee_recue = new data_received();
+
+    tcpSocket = new QTcpSocket();
+    pTimer = new QTimer();
 }
 
 // This will load pictures
@@ -87,26 +87,36 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-
+    donnee_recue->_liste(1);
 }
 
 
 
 void MainWindow::on_connect_forced_clicked()
-{
-    // Préparation de la requête
-    QByteArray message;
-    QByteArray requete = "F";
-    QByteArray requete2 = "T";
+{    
+    if (verif1 == false)
+    {
+        // Préparation de la requête
+        QByteArray message;
+        QByteArray requete = "F";
 
+        // Envoi de la requête
+        tcpSocket->write(requete);
 
-    // Envoi de la requête
-    tcpSocket->write(requete);
-    tcpSocket->write(requete2);
+        verif1 = true;
+    }
+    else
+    {
+        // Préparation de la requête
+        QByteArray message;
+        QByteArray requete = "T";
 
-    //  Lancement timer (Attention changement de valeur possible)
-    pTimer->start(1000);
-    pTimer2->start(1000);
+        // Envoi de la requête
+        tcpSocket->write(requete);
+
+        //lancement timer
+        pTimer->start(1000);
+    }
 }
 
 
@@ -136,11 +146,17 @@ void MainWindow::on_disconnect_button_clicked()
 
     // Envoi de la requête
     tcpSocket->write(requete);
+
     // Association du "tick" du timer à l'appel d'une méthode SLOT
     connect(pTimer, SIGNAL(timeout()), this, SLOT(on_connect_forced_clicked()));
+
     // Déconnexion du serveur
     tcpSocket->close();
+
+    // Message de débug
     qDebug()<<"Deconnecter";
+
+    verif1 = false;
 }
 
 
