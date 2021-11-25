@@ -5,6 +5,9 @@ TCP::TCP(int port)
 	//Initialisation pointeur
 	init();
 
+	//Save port dans classe
+	_port = port;
+
 	// Création de la socket serveur
 	sd_serveur = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -110,15 +113,15 @@ void TCP::creation_new_socket()
 				//Compteur tour pour gerer le temps
 				donnee->compteur_tour++;
 
-				//Si le compteur est entre 10 inclut et 13 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps
-				if (donnee->compteur_tour >= 10 && donnee->compteur_tour < 13)
+				//Si le compteur est entre 1 inclut et 5 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps pour laisser la place aux autre et eviter de surcharger la bande passante
+				if (donnee->compteur_tour >= 1 && donnee->compteur_tour < 5)
 				{
 					//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
 					reponse = "deconnexion_proche";
 					envoi_reponse_client(reponse);
 
 					//Faire parler le robot en disant"deconnection"
-					robot->parler(reponse, false);
+					robot->parler(reponse, true);
 
 					//Pause dans le programme grace à un thread
 					robot->attendre(10);
@@ -132,7 +135,7 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(reponse);
 
 					//Faire parler le robot en disant"deconnection"
-					robot->parler(reponse, false);
+					robot->parler(reponse, true);
 
 					//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
 					break;
@@ -159,7 +162,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4
+			//...123v4v5
 		}
 	}
 }
@@ -192,6 +195,34 @@ void TCP::close_socket_serveur()
 {
 	// Fermeture de la socket client
 	close(sd_serveur);
+}
+
+std::string TCP::crypte_reponse(std::string reponse)
+{
+	//Declarations variables
+	std::string enc;
+
+	for (int i = 0; i < reponse.size(); i++)
+	{
+		enc += reponse[i] ^ (int(key_cryptage) + i) % 20;
+	}
+
+	//Retourner valeur crypte
+	return enc;
+}
+
+std::string TCP::Decrypte_message(std::string message)
+{
+	//Declarations variables
+	std::string dec;
+
+	for (int i = 0; i < message.size(); i++)
+	{
+		dec += message[i] ^ (int(key_cryptage) + i) % 20;
+	}
+
+	//Retourner valeur crypte
+	return dec;
 }
 
 TCP::~TCP()
