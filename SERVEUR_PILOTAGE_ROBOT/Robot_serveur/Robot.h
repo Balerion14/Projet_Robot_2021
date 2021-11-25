@@ -21,6 +21,16 @@
 using namespace std;
 using namespace ev3dev;
 
+//Creation de macro associer à des valeurs qui correspondent à des actions
+#define AVANCER Z;
+#define RECULER S;
+#define GAUCHES Q;
+#define DROITES D;
+#define STOP C;
+#define RAISE_ARM A;
+#define GO_DOWN_ARM E;
+#define SEND_INFOS capteur;
+
 
 // Définition de la classe
 class Robot
@@ -317,6 +327,37 @@ public:
 	 * @return rien
 	 */
 	void recupererPositionsDesMoteurs(int& positionGauche, int& positionCentre, int& positionDroite);
+
+	/**
+	* Méthode de la classe "Robot"
+	* Renvoi les infos des capteurs dans un tableau "Robot".
+	* return un std::array
+	*/
+	std::array<int, 5>& Renvoi_infos_capteur();
+
+	/**
+	* Méthode de la classe "Robot"
+	* Effectue action robot de classe "Robot".
+	* paramètre string requete
+	* return rien
+	*/
+	void do_action_robot(std::string requete);
+
+	/**
+	* Méthode de la classe "Robot"
+	* Transforme sous format CSV de la classe "Robot".
+	* std::array
+	* return rien
+	*/
+	std::string transforme_CSV(std::array<int, 5> & const);
+
+	/**
+	* Méthode de la classe "Robot"
+	* Determine l'action du robot(renvoie d'infos ou bien action(avancee...)) "Robot".
+	* string requete
+	* return true == action(avance..) et false == renvoi infos capteur
+	*/
+	bool evaluate_action_robot(std::string requete);
 	
 	/**
 	 * Méthode pour récupérer attribut frequence

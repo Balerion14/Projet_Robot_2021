@@ -364,6 +364,28 @@ void Robot::recupererPositionsDesMoteurs(int& positionGauche, int& positionCentr
 	positionDroite = pMoteurDroit->position();
 }
 
+
+std::array<int, 5>& Robot::Renvoi_infos_capteur()
+{
+	//...
+}
+
+void Robot::do_action_robot(std::string requete)
+{
+	//...
+}
+
+std::string Robot::transforme_CSV(std::array<int, 5>& const)
+{
+	//...
+}
+
+
+bool Robot::evaluate_action_robot(std::string requete)
+{
+	//...
+}
+
 float Robot::recup_frequence(float _frequence)
 {
 	frequence = _frequence;

@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <sys/un.h>
 #include <arpa/inet.h>
+#include <array>
 #include "Robot.h"
 
 //structure de données
@@ -25,8 +26,9 @@ class TCP
 private:
 	int sd_serveur{};
 	int sd_client{};
-	int port{};
+	int _port{};
 	std::string reponse{};
+	char key_cryptage{ 'x' };
 	Robot* robot;
 	Donnee* donnee;
 public:
@@ -86,5 +88,19 @@ public:
 	* Auncun paramètre
 	*/
 	void close_socket_serveur();
+
+	/**
+	* Méthode de la classe "TCP"
+	* Cryptage message en XOR "TCP".
+	* string reponse
+	*/
+	std::string crypte_reponse(std::string reponse);
+
+	/**
+	* Méthode de la classe "TCP"
+	* Décryptage message en XOR "TCP".
+	* string reponse
+	*/
+	std::string Decrypte_message(std::string message);
 };
 
