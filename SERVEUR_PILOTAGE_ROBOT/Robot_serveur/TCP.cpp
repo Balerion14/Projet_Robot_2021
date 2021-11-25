@@ -11,6 +11,11 @@ TCP::TCP(int port)
 	// Création de la socket serveur
 	sd_serveur = socket(AF_INET, SOCK_STREAM, 0);
 
+	//Non reutilisation de la socket après un arret sauvage
+	int option = 1;
+	setsockopt(sd_serveur, SQL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+
+
 	// Configuration de la socket, notamment le port d'écoute
 	struct sockaddr_in cfg_serveur;
 	cfg_serveur.sin_family = AF_INET;
@@ -18,7 +23,12 @@ TCP::TCP(int port)
 	cfg_serveur.sin_port = htons(port);
 
 	// Attachement de la socket au port défini
-	bind(sd_serveur, (struct sockaddr*)&cfg_serveur, sizeof(cfg_serveur));
+	int resultat = bind(sd_serveur, (struct sockaddr*)&cfg_serveur, sizeof(cfg_serveur));
+	if (resultat < 0)
+	{
+		cout << "ERREUR DE PORT" << endl;
+		return -1;
+	}
 
 	// Création une file d'attente de connexion
 	listen(sd_serveur, 5);
@@ -182,7 +192,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1
+			//...123v4v5v6.1.1
 		}
 	}
 }

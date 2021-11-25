@@ -372,19 +372,73 @@ std::array<int, 5>& Robot::Renvoi_infos_capteur()
 
 void Robot::do_action_robot(std::string requete)
 {
-	//...
+	//Variable locale pour gerer la sortie des boucle while et donc le temps
+	bool marche{ false };
+
+	//initialisation du temps
+	clock_t start, end;
+
+	//Choix de l'action à réaliser en fonction de la requete
+	switch (requete[0])
+	{
+	case 'Z':
+
+		//Lancement du timer
+		start = clock();
+
+		//Boucle pour faire avancer notre robot le temps qu'on souhaite
+		while (marche == false)
+		{
+			if (( (end = clock()) - start) / CLOCKS_PER_SEC == 10)
+			{
+
+            }
+		}
+
+		//Puissance moteur pour aller tout droit
+		changerPuissanceMoteurs(100, 100, 100);
+
+		//Sortir du cas
+	    break;
+
+	case 'S':
+
+		break;
+	case 'Q':
+
+		break;
+	case 'D':
+
+		break;
+	case 'A':
+
+		break;
+	case 'E':
+
+		break;
+	case 'C':
+
+		break;
+	case 'T':
+
+		break;
+	default:
+		break;
+	}
 }
 
 std::string Robot::transforme_CSV(const std::array<int, 5> & n)
 {
 	// Construction de la chaîne de caractères en mémoire
 	ostringstream preparation;
-	//preparation << n.get(0) << ";" << n[1]<< ";"<< n[2]<< ";"<<n[3]<< ";" << n[4] << ";";
+	preparation << n.at(0) << ";" << n.at(1)<< ";"<< n.at(2)<< ";"<< n.at(3)<< ";" << n.at(4) << ";";
 
 	// Transformation de la chaîne préparée en string
 	string chaine = preparation.str();
-}
 
+	//Return la chaine avec les informations du capteur en csv
+	return chaine;
+}
 
 bool Robot::evaluate_action_robot(std::string requete)
 {

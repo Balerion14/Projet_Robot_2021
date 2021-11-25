@@ -1,7 +1,7 @@
 /**
  * @file robot.h
  * @brief Définition de la classe Robot
- * @author David SALLE
+ * @author Benaitier Loris
  * @date 25/02/2019
  * @version 0.2
  *
@@ -17,6 +17,8 @@
 #include <thread>
 #include <iostream>
 #include <sstream>
+#include <array>
+#include <chrono>
 #include "ev3dev.h"
 
 // Espaces de noms utilisés
