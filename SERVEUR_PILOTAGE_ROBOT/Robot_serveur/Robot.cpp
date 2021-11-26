@@ -364,36 +364,28 @@ void Robot::recupererPositionsDesMoteurs(int& positionGauche, int& positionCentr
 	positionDroite = pMoteurDroit->position();
 }
 
-
 std::array<int, 5>& Robot::Renvoi_infos_capteur()
 {
-	//...
+	//Declaration tableau
+	std::array<int, 5> tableau;
+
+	//Ajout des informations des capteurs dans le tableau
+    //Recuperer angle moteur
+	tableau[0] = recupererPositionDuMoteur(GAUCHE);
+	tableau[1] = recupererPositionDuMoteur(DROITE);
+
+	//Distance obstacle(*10 : centimetre->milimètre) et toux de snirium
+	tableau[2] = recupererDistance() * 10;
+	tableau[3] = recupererGyroscopeAngle();
+	tableau[5] = recupererLumiereReflechie();
 }
 
 void Robot::do_action_robot(std::string requete)
 {
-	//Variable locale pour gerer la sortie des boucle while et donc le temps
-	bool marche{ false };
-
-	//initialisation du temps
-	clock_t start, end;
-
 	//Choix de l'action à réaliser en fonction de la requete
 	switch (requete[0])
 	{
-	case 'Z':
-
-		//Lancement du timer
-		start = clock();
-
-		//Boucle pour faire avancer notre robot le temps qu'on souhaite
-		while (marche == false)
-		{
-			if (( (end = clock()) - start) / CLOCKS_PER_SEC == 10)
-			{
-
-            }
-		}
+	case AVANCER:
 
 		//Puissance moteur pour aller tout droit
 		changerPuissanceMoteurs(100, 100, 100);
@@ -401,28 +393,60 @@ void Robot::do_action_robot(std::string requete)
 		//Sortir du cas
 	    break;
 
-	case 'S':
+	case RECULER:
 
-		break;
-	case 'Q':
+		//Puissance moteur pour reculer
+		changerPuissanceMoteurs(-100, -100, -100);
 
+		//Sortir du cas
 		break;
-	case 'D':
 
-		break;
-	case 'A':
+	case GAUCHES:
 
-		break;
-	case 'E':
+		//Puissance moteur pour aller à gauche
+		changerPuissanceMoteurs(-100, 0, 100);
 
+		//Sortir du cas
 		break;
-	case 'C':
 
-		break;
-	case 'T':
+	case DROITES:
 
+		//Puissance moteur pour aller à droite
+		changerPuissanceMoteurs(100, 0, -100);
+
+		//Sortir du cas
 		break;
+		
+	case STOP:
+
+		//Puissance moteur arreter le robot
+		changerPuissanceMoteurs(0, 0, 0);
+
+		//Sortir du cas
+		break;
+
+	case RAISE_ARM:
+
+		//Puissance moteur pour monter bras
+		//changerPuissanceMoteurs(100, 100, 100);
+
+		//Sortir du cas
+		break;
+
+	case GO_DOWN_ARM:
+
+		//Puissance moteur pour descendre bras
+		//changerPuissanceMoteurs(100, 100, 100);
+
+		//Sortir du cas
+		break;
+
 	default:
+
+		//Puissance moteur pour aller tout droit
+		changerPuissanceMoteurs(0, 0, 0);
+
+		//Sortir du cas
 		break;
 	}
 }
@@ -440,17 +464,17 @@ std::string Robot::transforme_CSV(const std::array<int, 5> & n)
 	return chaine;
 }
 
-bool Robot::evaluate_action_robot(std::string requete)
+std::string Robot::evaluate_action_robot(std::string requete)
 {
-	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère les infos du capteur
+	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère transforme csv et recup capteurs
 	if (requete[0] == SEND_INFOS)
 	{
-		Renvoi_infos_capteur();
+		return transforme_CSV(Renvoi_infos_capteur());
 	}
 	//Sinon on fait appelle à la methode qui gère les actions du robot
 	else
 	{
-		do_action_robot(requete);
+		return "action_effectue";
 	}
 }
 

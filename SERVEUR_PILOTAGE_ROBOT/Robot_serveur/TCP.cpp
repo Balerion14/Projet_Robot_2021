@@ -100,16 +100,20 @@ void TCP::creation_new_socket()
 			//on verifie aussi qu'il a bien effectue la premiere connexion 
 			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true)
 			{
-					//Si c est egale à une des requetes qui correspond au actions du robot, appel fonction robot correspondante
-				    //...
-				    // Si ca c est bien passe, envoi "ok" sinon "erreur" + action effectue : "avance, recule, gauche, droite, tourner..." 
-					envoi_reponse_client(reponse);
+	            //Appel fonction qui va determiner quel action faire(bouger robot ou envoyer donnee)
+				std::string message = robot->evaluate_action_robot(reponse);
 
-					//Si la requete correspond à une demande d'information, alors appele methode robot pour recuperer informations
-					//...
-					// Si ca c est bien passe, envoi "ok" sinon "erreur" + les donnees
+				//Si message vaut "action_effectue" alors on envoi action effectue sinon le format csv crypter
+				if (message == "action_effectue")
+				{
+					//Envoie reponse au client
 					envoi_reponse_client(reponse);
-				
+				}
+				else
+				{
+					std::string message_crypte = crypte_reponse(message);
+					envoi_reponse_client(message_crypte);
+				}		
 			}
 
 			//Si reponse est egale à alpha-go et activation3 vaut true 
@@ -192,7 +196,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1
+			//...123v4v5v6.1.1v7
 		}
 	}
 }

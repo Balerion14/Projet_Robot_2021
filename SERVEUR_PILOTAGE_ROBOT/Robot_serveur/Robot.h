@@ -359,9 +359,9 @@ public:
 	* Méthode de la classe "Robot"
 	* Determine l'action du robot(renvoie d'infos ou bien action(avancee...)) "Robot".
 	* string requete
-	* return true == action(avance..) et false == renvoi infos capteur
+	* return string
 	*/
-	bool evaluate_action_robot(std::string requete);
+	std::string evaluate_action_robot(std::string requete);
 	
 	/**
 	 * Méthode pour récupérer attribut frequence
