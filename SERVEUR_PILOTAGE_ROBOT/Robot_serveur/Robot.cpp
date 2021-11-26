@@ -377,7 +377,10 @@ std::array<int, 5>& Robot::Renvoi_infos_capteur()
 	//Distance obstacle(*10 : centimetre->milimètre) et toux de snirium
 	tableau[2] = recupererDistance() * 10;
 	tableau[3] = recupererGyroscopeAngle();
-	tableau[5] = recupererLumiereReflechie();
+	tableau[4] = recupererLumiereAmbiante();
+
+	//Retourner tableau de valeur des capteurs
+	return tableau;
 }
 
 void Robot::do_action_robot(std::string requete)
@@ -388,7 +391,7 @@ void Robot::do_action_robot(std::string requete)
 	case AVANCER:
 
 		//Puissance moteur pour aller tout droit
-		changerPuissanceMoteurs(100, 100, 100);
+		changerPuissanceMoteurs(100, 0, 100);
 
 		//Sortir du cas
 	    break;
@@ -396,7 +399,7 @@ void Robot::do_action_robot(std::string requete)
 	case RECULER:
 
 		//Puissance moteur pour reculer
-		changerPuissanceMoteurs(-100, -100, -100);
+		changerPuissanceMoteurs(-100, 0, -100);
 
 		//Sortir du cas
 		break;
@@ -428,7 +431,7 @@ void Robot::do_action_robot(std::string requete)
 	case RAISE_ARM:
 
 		//Puissance moteur pour monter bras
-		//changerPuissanceMoteurs(100, 100, 100);
+		changerPuissanceMoteurs(0, 100, 0);
 
 		//Sortir du cas
 		break;
@@ -436,7 +439,7 @@ void Robot::do_action_robot(std::string requete)
 	case GO_DOWN_ARM:
 
 		//Puissance moteur pour descendre bras
-		//changerPuissanceMoteurs(100, 100, 100);
+		changerPuissanceMoteurs(0, -100, 0);
 
 		//Sortir du cas
 		break;
