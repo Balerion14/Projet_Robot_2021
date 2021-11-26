@@ -1,7 +1,7 @@
 /**
  * @file robot.h
  * @brief Définition de la classe Robot
- * @author David SALLE
+ * @author Benaitier Loris
  * @date 25/02/2019
  * @version 0.2
  *
@@ -17,6 +17,8 @@
 #include <thread>
 #include <iostream>
 #include <sstream>
+#include <array>
+#include <chrono>
 #include "ev3dev.h"
 
 // Espaces de noms utilisés
@@ -357,9 +359,9 @@ public:
 	* Méthode de la classe "Robot"
 	* Determine l'action du robot(renvoie d'infos ou bien action(avancee...)) "Robot".
 	* string requete
-	* return true == action(avance..) et false == renvoi infos capteur
+	* return string
 	*/
-	bool evaluate_action_robot(std::string requete);
+	std::string evaluate_action_robot(std::string requete);
 	
 	/**
 	 * Méthode pour récupérer attribut frequence
