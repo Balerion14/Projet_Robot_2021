@@ -72,7 +72,7 @@ void TCP::creation_new_socket()
 				}
 			}
 
-			//Verification si le robot veut une connexion en continu(connexion force->IHM)
+			//Verification si le robot veut une connexion en continu(connexion force->IHM), (peut etre rajout de active 3 = true)
 			if (reponse == "connexion-force" && donnee->activation4 == false)
 			{
 				donnee->activation4 == true;
@@ -106,7 +106,7 @@ void TCP::creation_new_socket()
 				//Si message vaut "action_effectue" alors on envoi action effectue sinon le format csv crypter
 				if (message == "action_effectue")
 				{
-					//Envoie reponse au client
+					//Envoie reponse au client, penser à peut etre renvoyer un autre message que les commandes mais pour test c est ok
 					envoi_reponse_client(reponse);
 				}
 				else
@@ -196,7 +196,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7
+			//...123v4v5v6.1.1v7v8
 		}
 	}
 }
@@ -262,6 +262,7 @@ std::string TCP::Decrypte_message(std::string message)
 TCP::~TCP()
 {
 	delete robot;
+	delete donnee;
 }
 
 
