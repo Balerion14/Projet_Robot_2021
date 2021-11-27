@@ -10,14 +10,22 @@
  */
 
 #include <iostream>
+#include "Robot.cpp"
+#include "TCP.cpp"
 
 using namespace std;
 
 int main()
 {
-    // Affichage
-    cout << "Hello world from EV3 !!!" << endl;
+    //declaration variable
+    int port = 1664;
 
+    //Creation objet pour le serveur
+    TCP serveur(port);
+
+    //Lancement socket serveur
+    serveur.creation_new_socket();
+    
     // Fin du programme
     return 0;
 }
