@@ -57,26 +57,19 @@ void TCP::creation_new_socket()
 			reponse = _reponse;
 
 			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
-			while (donnee->activation3 == false)
+			if (donnee->activation3 == false && reponse == "alpha-go")
 			{
-				if (reponse == "alpha-go")
-				{
 					donnee->activation3 == true;
-					break;
-				}
-				else
-				{
-					reponse = "erreur";
-					envoi_reponse_client(reponse);
-					break;
-				}
 			}
 
 			//Verification si le robot veut une connexion en continu(connexion force->IHM), (peut etre rajout de active 3 = true)
-			if (reponse == "connexion-force" && donnee->activation4 == false)
+			if (reponse == "connexion-force" && donnee->activation4 == false && donnee->activation3 == true)
 			{
 				donnee->activation4 == true;
 			}
+
+			//Appel methode pour savoir si on doit ou pas activer le timer ou bien si on doit le reset
+			Start_timer(reponse);
 
 			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion 
 			if (reponse == "deconnecte" && donnee->activation3 == true)
@@ -130,31 +123,30 @@ void TCP::creation_new_socket()
 			//Si il ne se passe aucune action donc que aucune des conditions n'est été utilisé alors on attend 20 seconde
 			else
 			{
-				//Compteur tour pour gerer le temps
-				donnee->compteur_tour++;
-
+		
 				//Verification globale si il veut ou pas une connnexion en continue
 				if (donnee->activation4 == false)
 				{
+
+					//Calcule du temps avec le cumule
+					End_timer();
+
 					//Si le compteur est entre 1 inclut et 5 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps pour laisser la place aux autre et eviter de surcharger la bande passante
-					if (donnee->compteur_tour >= 1 && donnee->compteur_tour < 5)
+					if (donnee->time_total < 30)
 					{
 						//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
-						reponse = "deconnexion_proche";
+						reponse = "Inactivite-detecte";
 						envoi_reponse_client(reponse);
 
-						//Faire parler le robot en disant"deconnection"
+						//Faire parler le robot en disant"Inactivite-detecte"
 						robot->parler(reponse, true);
-
-						//Pause dans le programme grace à un thread
-						robot->attendre(10);
 					}
 
-					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante
+					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante au bout d'un certains temps
 					else
 					{
 						//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
-						reponse = "deconnexion_delai_depasse";
+						reponse = "deconnexion-delai-depasse";
 						envoi_reponse_client(reponse);
 
 						//Faire parler le robot en disant"deconnection"
@@ -183,8 +175,8 @@ void TCP::creation_new_socket()
 		//Reactivation du bouton force connexion
 		donnee->activation4 = false;
 
-		//remise à 0 du compteur
-		donnee->compteur_tour = 0;
+		//remise à 0 du mode reset du timer apres une deconnexion d'un client
+		donnee->activation5 = false;
 
 		//fermeture client pour en attendre un autre
 		close_socket_client();
@@ -196,7 +188,7 @@ void TCP::creation_new_socket()
 			donnee->activation = true;
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7v8
+			//...123v4v5v6.1.1v7v8v9
 		}
 	}
 }
@@ -257,6 +249,49 @@ std::string TCP::Decrypte_message(std::string message)
 
 	//Retourner valeur crypte
 	return dec;
+}
+
+void TCP::Start_timer(std::string reponse)
+{
+	//Declaration du timer de commencencement
+	clock_t start;
+
+	//Si je ne suis pas connecte
+	if (donnee->activation3 == false)
+	{
+		start = clock();
+		donnee->time_start = start;
+		donnee->activation5 = true;
+	}
+
+	//Si je suis connecte
+	else
+	{
+		//On s' assure que la reponse ne soit pas egale à une commande connu et que on est pas active la connexion force
+		if (reponse != "alpha-go" && reponse != "deconnexion" && reponse != "connexion-force" && donnee->activation4 == false && reponse != "Z" && reponse != "S" && reponse != "Q" && reponse != "D" && reponse != "C" && reponse != "A" && reponse != "E" && reponse != "T")
+		{
+			start = clock();
+			donnee->time_start = start;
+			donnee->activation5 = true;
+		}
+
+		//Si la reponse est correcte alors on desactive la securite pour pouvoir reset le temps
+		else
+		{
+			donnee->activation5 = false;
+			donnee->time_total = 0;
+		}
+	}
+}
+
+void TCP::End_timer()
+{
+	//Declaration du timer de fin
+	clock_t end;
+
+	//Fin temps
+	end = clock();
+	donnee->time_total += end - donnee->time_start;
 }
 
 TCP::~TCP()

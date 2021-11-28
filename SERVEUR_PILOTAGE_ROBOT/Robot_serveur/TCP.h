@@ -17,7 +17,12 @@ typedef struct Donnee
 	bool activation5{ false };
 	bool activation6{ false };
 	bool activation7{ false };
+
 	int compteur_tour{0};
+
+	int time_start{};
+	int time_end{};
+	int time_total{};
 };
 
 //CLasse serveur TCP
@@ -102,5 +107,17 @@ public:
 	* string reponse
 	*/
 	std::string Decrypte_message(std::string message);
+
+	/**
+	* Méthode de la classe "TCP"
+	* Demarage du timer en fonction de certaines situations "TCP".
+	*/
+	void Start_timer(std::string reponse);
+
+	/**
+	* Méthode de la classe "TCP"
+	*Arret du timer en fonction de certaines situations "TCP".
+	*/
+	void End_timer();
 };
 
