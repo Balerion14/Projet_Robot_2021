@@ -1,0 +1,489 @@
+/**
+ * @file robot.cpp
+ * @brief Implémentation de la classe Robot
+ * @author David SALLE
+ * @date 25/02/2010
+ * @version 0.2
+ *
+ * Cette classe Robot formera une sur-couche à l'ensemble des classes ev3dev
+ * et facilitera ainsi le développement des programmes pour les "challenges"
+ */
+
+ // Librairies utilisées
+#include "Robot.h"
+
+
+//==============================================================================
+// Méthodes constructeur et desctructeur
+//==============================================================================
+Robot::Robot()
+{
+
+	// Instanciations dynamiques des objets "moteurs" selon leurs ports de sortie respectifs
+	pMoteurGauche = new large_motor("ev3-ports:outA");			// "outA"
+	pMoteurCentral = new medium_motor("ev3-ports:outB");	// "outB"
+	pMoteurDroit = new large_motor("ev3-ports:outC");			// "outC"
+
+	// Vérifications de la présence des moteurs
+	if (pMoteurGauche->connected() == false)
+	{
+		cout << "ERREUR => Le moteur gauche ne semble pas présent (port A)" << endl;
+	}
+	if (pMoteurCentral->connected() == false)
+	{
+		cout << "ERREUR => Le moteur central ne semble pas présent (port B)" << endl;
+	}
+	if (pMoteurDroit->connected() == false)
+	{
+		cout << "ERREUR => Le moteur droit ne semble pas présent (port C)" << endl;
+	}
+
+	// Initialisations des moteurs
+	initialiserMoteurs();
+
+	// Vérification de la présence des capteurs
+	if (capteurAngle.connected() == false)
+	{
+		cout << "ERREUR => Le capteur d'angle ne semble pas présent" << endl;
+	}
+	else
+	{
+		initialiserGyroscope();
+	}
+
+	if (capteurContact.connected() == false)
+	{
+		cout << "ERREUR => Le capteur de contact ne semble pas présent" << endl;
+	}
+	if (capteurCouleur.connected() == false)
+	{
+		cout << "ERREUR => Le capteur de couleur ne semble pas présent" << endl;
+	}
+	if (capteurDistance.connected() == false)
+	{
+		cout << "ERREUR => Le capteur de distance ne semble pas présent" << endl;
+	}
+}
+
+
+Robot::~Robot()
+{
+	// Destruction des objets "moteurs"
+	delete pMoteurGauche;
+	delete pMoteurCentral;
+	delete pMoteurDroit;
+}
+
+
+//==============================================================================
+// Méthodes utilitaires
+//==============================================================================
+void Robot::attendre(int delai_en_millisecondes)
+{
+	this_thread::sleep_for(chrono::milliseconds(delai_en_millisecondes));
+}
+
+
+//==============================================================================
+// Méthodes pour gérer le gyroscope
+//==============================================================================
+int Robot::recupererGyroscopeAngle()
+{
+	return capteurAngle.angle();
+}
+
+
+int Robot::recupererGyroscopeVitesse()
+{
+	return capteurAngle.rate();
+}
+
+
+void Robot::initialiserGyroscope()
+{
+	capteurAngle.set_mode(capteurAngle.mode_gyro_cal);
+	capteurAngle.set_mode(capteurAngle.mode_gyro_ang);
+}
+
+
+//==============================================================================
+// Méthodes pour gérer le capteur de contact
+//==============================================================================
+bool Robot::recupererEtatCapteurContact()
+{
+	return capteurContact.is_pressed();
+}
+
+
+//==============================================================================
+// Méthodes pour gérer le capteur de couleur
+//==============================================================================
+int Robot::recupererLumiereReflechie()
+{
+	return capteurCouleur.reflected_light_intensity();
+}
+
+int Robot::recupererLumiereAmbiante()
+{
+	return capteurCouleur.ambient_light_intensity();
+}
+
+int Robot::recupererCouleurCode()
+{
+	return capteurCouleur.color();
+}
+
+int Robot::recupererCouleurRouge()
+{
+	return capteurCouleur.red();
+}
+
+int Robot::recupererCouleurVerte()
+{
+	return capteurCouleur.green();
+}
+
+int Robot::recupererCouleurBleue()
+{
+	return capteurCouleur.blue();
+}
+
+
+//==============================================================================
+// Méthodes pour gérer le capteur de distance (ultrason)
+//==============================================================================
+float Robot::recupererDistance()
+{
+	return capteurDistance.distance_centimeters();
+}
+
+
+//==============================================================================
+// Méthodes pour gérer la batterie
+//==============================================================================
+float Robot::recupererBatterieTension()
+{
+	return power_supply::battery.measured_volts();
+}
+
+float Robot::recupererBatterieIntensite()
+{
+	return power_supply::battery.measured_amps();
+}
+
+
+//==============================================================================
+// Méthodes pour gérer l'écran LCD
+//==============================================================================
+void Robot::allumerPixel(int x, int y)
+{
+	if ((x >= 0) && (x < 178) && (y >= 0) && (y < 128))
+	{
+		unsigned char* pFB = ecran.frame_buffer();
+		pFB[(x / 8) + (y * 24)] = 1 << (x % 8);
+	}
+}
+
+void Robot::eteindrePixel(int x, int y)
+{
+	if ((x >= 0) && (x < 178) && (y >= 0) && (y < 128))
+	{
+		unsigned char* pFB = ecran.frame_buffer();
+		pFB[(x / 8) + (y * 24)] = 0 << (x % 8);
+	}
+}
+
+
+//==============================================================================
+// Méthodes pour gérer les boutons
+//==============================================================================
+bool Robot::recupererEtatBoutonHaut()
+{
+	return button::up.pressed();
+}
+
+bool Robot::recupererEtatBoutonBas()
+{
+	return button::down.pressed();
+}
+
+bool Robot::recupererEtatBoutonDroite()
+{
+	return button::right.pressed();
+}
+
+bool Robot::recupererEtatBoutonGauche()
+{
+	return button::left.pressed();
+}
+
+bool Robot::recupererEtatBoutonCentral()
+{
+	return button::enter.pressed();
+}
+
+bool Robot::recupererEtatBoutonRetour()
+{
+	return button::back.pressed();
+}
+
+
+//==============================================================================
+// Méthodes pour gérer les leds
+//==============================================================================
+void Robot::allumerLed(Emplacement e, Couleur c)
+{
+	if ((e == GAUCHE) && (c == ROUGE))
+	{
+		led::red_left.on();
+	}
+	if ((e == GAUCHE) && (c == VERTE))
+	{
+		led::green_left.on();
+	}
+	if ((e == DROITE) && (c == ROUGE))
+	{
+		led::red_right.on();
+	}
+	if ((e == DROITE) && (c == VERTE))
+	{
+		led::green_right.on();
+	}
+}
+
+void Robot::eteindreLed(Emplacement e, Couleur c)
+{
+	if ((e == GAUCHE) && (c == ROUGE))
+	{
+		led::red_left.off();
+	}
+	if ((e == GAUCHE) && (c == VERTE))
+	{
+		led::green_left.off();
+	}
+	if ((e == DROITE) && (c == ROUGE))
+	{
+		led::red_right.off();
+	}
+	if ((e == DROITE) && (c == VERTE))
+	{
+		led::green_right.off();
+	}
+}
+
+
+//==============================================================================
+// Méthodes pour gérer le son
+//==============================================================================
+void Robot::emettreSon(float frequence, float duree, bool synchrone)
+{
+	sound::tone(frequence, duree, synchrone);
+}
+
+void Robot::parler(string phrase, bool synchrone)
+{
+	sound::speak(phrase, synchrone);
+}
+
+void Robot::lireFichierSon(string nomFichier, bool synchrone)
+{
+	sound::play(nomFichier, synchrone);
+}
+
+
+//==============================================================================
+// Méthodes pour gérer les moteurs
+//==============================================================================
+void Robot::initialiserMoteurs()
+{
+	// Ré-initialisation des 3 moteurs
+	pMoteurGauche->reset();
+	pMoteurCentral->reset();
+	pMoteurDroit->reset();
+}
+
+void Robot::changerPuissanceMoteurs(int puissanceGauche, int puissanceCentrale, int puissanceDroite)
+{
+	// Seuillage des puissances (au cas où)
+	if (puissanceGauche < -100)
+	{
+		puissanceGauche = -100;
+	}
+	if (puissanceCentrale < -100)
+	{
+		puissanceCentrale = -100;
+	}
+	if (puissanceDroite < -100)
+	{
+		puissanceDroite = -100;
+	}
+	if (puissanceGauche > 100)
+	{
+		puissanceGauche = 100;
+	}
+	if (puissanceCentrale > 100)
+	{
+		puissanceCentrale = 100;
+	}
+	if (puissanceDroite > 100)
+	{
+		puissanceDroite = 100;
+	}
+
+	// Modification de la puissance des moteurs...
+	pMoteurGauche->set_duty_cycle_sp(puissanceGauche);
+	pMoteurCentral->set_duty_cycle_sp(puissanceCentrale);
+	pMoteurDroit->set_duty_cycle_sp(puissanceDroite);
+
+	// ...et application
+	pMoteurGauche->run_direct();
+	pMoteurDroit->run_direct();
+	pMoteurCentral->run_direct();
+}
+
+int Robot::recupererPositionDuMoteur(Emplacement e)
+{
+	if (e == GAUCHE)
+	{
+		return pMoteurGauche->position();
+	}
+	if (e == CENTRE)
+	{
+		return pMoteurCentral->position();
+	}
+	if (e == DROITE)
+	{
+		return pMoteurDroit->position();
+	}
+}
+
+void Robot::recupererPositionsDesMoteurs(int& positionGauche, int& positionCentre, int& positionDroite)
+{
+	positionGauche = pMoteurGauche->position();
+	positionCentre = pMoteurCentral->position();
+	positionDroite = pMoteurDroit->position();
+}
+
+std::array<int, 5>& Robot::Renvoi_infos_capteur()
+{
+	//Declaration tableau
+	std::array<int, 5> tableau;
+
+	//Ajout des informations des capteurs dans le tableau
+    //Recuperer angle moteur
+	tableau[0] = recupererPositionDuMoteur(GAUCHE);
+	tableau[1] = recupererPositionDuMoteur(DROITE);
+
+	//Distance obstacle(*10 : centimetre->milimètre) et toux de snirium
+	tableau[2] = recupererDistance() * 10;
+	tableau[3] = recupererGyroscopeAngle();
+	tableau[4] = recupererLumiereAmbiante();
+
+	//Retourner tableau de valeur des capteurs
+	return tableau;
+}
+
+void Robot::do_action_robot(std::string requete)
+{
+	//Choix de l'action à réaliser en fonction de la requete
+	switch (requete[0])
+	{
+	case AVANCER:
+
+		//Puissance moteur pour aller tout droit
+		changerPuissanceMoteurs(100, 0, 100);
+
+		//Sortir du cas
+	    break;
+
+	case RECULER:
+
+		//Puissance moteur pour reculer
+		changerPuissanceMoteurs(-100, 0, -100);
+
+		//Sortir du cas
+		break;
+
+	case GAUCHES:
+
+		//Puissance moteur pour aller à gauche
+		changerPuissanceMoteurs(-100, 0, 100);
+
+		//Sortir du cas
+		break;
+
+	case DROITES:
+
+		//Puissance moteur pour aller à droite
+		changerPuissanceMoteurs(100, 0, -100);
+
+		//Sortir du cas
+		break;
+		
+	case STOP:
+
+		//Puissance moteur arreter le robot
+		changerPuissanceMoteurs(0, 0, 0);
+
+		//Sortir du cas
+		break;
+
+	case RAISE_ARM:
+
+		//Puissance moteur pour monter bras
+		changerPuissanceMoteurs(0, 100, 0);
+
+		//Sortir du cas
+		break;
+
+	case GO_DOWN_ARM:
+
+		//Puissance moteur pour descendre bras
+		changerPuissanceMoteurs(0, -100, 0);
+
+		//Sortir du cas
+		break;
+
+	default:
+
+		//Puissance moteur pour aller tout droit
+		changerPuissanceMoteurs(0, 0, 0);
+
+		//Sortir du cas
+		break;
+	}
+}
+
+std::string Robot::transforme_CSV(const std::array<int, 5> & n)
+{
+	// Construction de la chaîne de caractères en mémoire
+	ostringstream preparation;
+	preparation << n.at(0) << ";" << n.at(1)<< ";"<< n.at(2)<< ";"<< n.at(3)<< ";" << n.at(4) << ";";
+
+	// Transformation de la chaîne préparée en string
+	string chaine = preparation.str();
+
+	//Return la chaine avec les informations du capteur en csv
+	return chaine;
+}
+
+std::string Robot::evaluate_action_robot(std::string requete)
+{
+	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère transforme csv et recup capteurs
+	if (requete[0] == SEND_INFOS)
+	{
+		return transforme_CSV(Renvoi_infos_capteur());
+	}
+	//Sinon on fait appelle à la methode qui gère les actions du robot
+	else
+	{
+		return "action_effectue";
+	}
+}
+
+float Robot::recup_frequence(float _frequence)
+{
+	frequence = _frequence;
+	return frequence;
+}
+
