@@ -7,27 +7,37 @@ TCP::TCP(int port)
 
 	//Save port dans classe
 	_port = port;
+	int resultat{};
 
 	// Création de la socket serveur
 	sd_serveur = socket(AF_INET, SOCK_STREAM, 0);
 
 	//Non reutilisation de la socket après un arret sauvage
 	int option = 1;
-	setsockopt(sd_serveur, SQL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+	setsockopt(sd_serveur, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
 
 	// Configuration de la socket, notamment le port d'écoute
 	struct sockaddr_in cfg_serveur;
 	cfg_serveur.sin_family = AF_INET;
 	cfg_serveur.sin_addr.s_addr = htonl(INADDR_ANY);
-	cfg_serveur.sin_port = htons(port);
 
-	// Attachement de la socket au port défini
-	int resultat = bind(sd_serveur, (struct sockaddr*)&cfg_serveur, sizeof(cfg_serveur));
+	//Boucle pour tester tous les port en cas de dysfonctionnement
+	do
+	{
+		//Choix du port
+		cfg_serveur.sin_port = htons(++port);
+
+		// Attachement de la socket au port défini
+	    resultat = bind(sd_serveur, (struct sockaddr*)&cfg_serveur, sizeof(cfg_serveur));
+	} 
+	while (resultat < 0);
+	
+	//Condition en cas d'erreur
 	if (resultat < 0)
 	{
 		cout << "ERREUR DE PORT" << endl;
-		return -1;
+		exit -1;
 	}
 
 	// Création une file d'attente de connexion
@@ -60,12 +70,18 @@ void TCP::creation_new_socket()
 			if (donnee->activation3 == false && reponse == "alpha-go")
 			{
 					donnee->activation3 == true;
+
+					//Message pour le debug
+					cout << "demande connexion active" << endl;
 			}
 
 			//Verification si le robot veut une connexion en continu(connexion force->IHM), (peut etre rajout de active 3 = true)
 			if (reponse == "connexion-force" && donnee->activation4 == false && donnee->activation3 == true)
 			{
 				donnee->activation4 == true;
+
+				//Message pour le debug
+				cout << "demande connexion force active" << endl;
 			}
 
 			//Appel methode pour savoir si on doit ou pas activer le timer ou bien si on doit le reset
@@ -75,7 +91,7 @@ void TCP::creation_new_socket()
 			if (reponse == "deconnecte" && donnee->activation3 == true)
 			{
 				//Envoyer la réponse au client(deconnecte)
-				reponse = "deconnexion";
+				reponse = "-deconnexion";
 
 				//Envoyer la réponse au client(informations capteurs)
 				envoi_reponse_client(reponse);
@@ -85,6 +101,9 @@ void TCP::creation_new_socket()
 
 				//Sortir de la boucel while
 				donnee->activation2 = true;
+
+				//Message pour le debug
+				cout << "deconnexion" << endl;
 
 				//Sortie boucle
 				break;
@@ -101,11 +120,17 @@ void TCP::creation_new_socket()
 				{
 					//Envoie reponse au client, penser à peut etre renvoyer un autre message que les commandes mais pour test c est ok
 					envoi_reponse_client(reponse);
+
+					//Message pour le debug
+					cout << "action effectue" << endl;
 				}
 				else
 				{
 					std::string message_crypte = crypte_reponse(message);
 					envoi_reponse_client(message_crypte);
+
+					//Message pour le debug
+					cout << "envoi trame" << endl;
 				}		
 			}
 
@@ -113,11 +138,14 @@ void TCP::creation_new_socket()
 			else if (donnee->activation3 == true && reponse == "alpha-go")
 			{
 				//Envoi reponse pour dire qu'il est connecter
-				reponse = "connection";
+				reponse = "-connection";
 				envoi_reponse_client(reponse);
 
 				//Faire parler le robot en disant"connection"
 				robot->parler(reponse, true);
+
+				//Message pour le debug
+				cout << "connexion" << endl;
 			}
 
 			//Si il ne se passe aucune action donc que aucune des conditions n'est été utilisé alors on attend 20 seconde
@@ -135,22 +163,28 @@ void TCP::creation_new_socket()
 					if (donnee->time_total < 30)
 					{
 						//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
-						reponse = "Inactivite-detecte";
+						reponse = "-Inactivite-detecte";
 						envoi_reponse_client(reponse);
 
 						//Faire parler le robot en disant"Inactivite-detecte"
 						robot->parler(reponse, true);
+
+						//Message pour le debug
+						cout << "inactivite detecte" << endl;
 					}
 
 					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante au bout d'un certains temps
 					else
 					{
 						//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
-						reponse = "deconnexion-delai-depasse";
+						reponse = "-deconnexion-delai-depasse";
 						envoi_reponse_client(reponse);
 
 						//Faire parler le robot en disant"deconnection"
 						robot->parler(reponse, true);
+
+						//Message pour le debug
+						cout << "deconnexion delai depasse" << endl;
 
 						//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
 						break;
@@ -160,8 +194,11 @@ void TCP::creation_new_socket()
 				//Si c est à true alors on envoi reponse comme quoi on est bien en mode connexion force
 				else
 				{
-					reponse = "connexion_force_active";
+					reponse = "-connexion_force_active";
 					envoi_reponse_client(reponse);
+
+					//Message pour le debug
+					cout << "connexion force" << endl;
 				}
 			}
 		}
@@ -181,14 +218,21 @@ void TCP::creation_new_socket()
 		//fermeture client pour en attendre un autre
 		close_socket_client();
 
+		//Message pour le debug
+		cout << "deconnexion client" << endl;
+
 		//Si le bouton centrale est enfonce alors on ferme le socket et fin
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
 			close_socket_serveur();
 			donnee->activation = true;
+
+			//Message pour le debug
+			cout << "deconnexion serveur" << endl;
+
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7v8v9
+			//...123v4v5v6.1.1v7v8v9.5
 		}
 	}
 }

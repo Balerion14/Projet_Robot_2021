@@ -10,8 +10,8 @@
  */
 
 #include <iostream>
-#include "Robot.cpp"
-#include "TCP.cpp"
+#include "Robot.h"
+#include "TCP.h"
 
 using namespace std;
 
