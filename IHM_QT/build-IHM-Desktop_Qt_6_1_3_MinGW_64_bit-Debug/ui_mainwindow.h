@@ -43,6 +43,10 @@ public:
     QPushButton *connect_forced;
     QLineEdit *input_port;
     QLineEdit *input_ip;
+    QLineEdit *action_status;
+    QLineEdit *angle_droit;
+    QLineEdit *angle_gauche;
+    QLineEdit *lumiere_amb;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -57,6 +61,7 @@ public:
         label_background = new QLabel(centralwidget);
         label_background->setObjectName(QString::fromUtf8("label_background"));
         label_background->setGeometry(QRect(0, 0, 1920, 1080));
+        label_background->setInputMethodHints(Qt::ImhNone);
         up_button = new QPushButton(centralwidget);
         up_button->setObjectName(QString::fromUtf8("up_button"));
         up_button->setGeometry(QRect(1200, 275, 150, 150));
@@ -146,6 +151,20 @@ public:
         input_ip = new QLineEdit(centralwidget);
         input_ip->setObjectName(QString::fromUtf8("input_ip"));
         input_ip->setGeometry(QRect(1025, 25, 350, 30));
+        action_status = new QLineEdit(centralwidget);
+        action_status->setObjectName(QString::fromUtf8("action_status"));
+        action_status->setGeometry(QRect(1025, 55, 350, 30));
+        angle_droit = new QLineEdit(centralwidget);
+        angle_droit->setObjectName(QString::fromUtf8("angle_droit"));
+        angle_droit->setGeometry(QRect(910, 400, 113, 24));
+        angle_gauche = new QLineEdit(centralwidget);
+        angle_gauche->setObjectName(QString::fromUtf8("angle_gauche"));
+        angle_gauche->setGeometry(QRect(850, 430, 113, 24));
+        lumiere_amb = new QLineEdit(centralwidget);
+        lumiere_amb->setObjectName(QString::fromUtf8("lumiere_amb"));
+        lumiere_amb->setGeometry(QRect(870, 500, 113, 24));
+        lumiere_amb->setAutoFillBackground(false);
+        lumiere_amb->setInputMethodHints(Qt::ImhHiddenText);
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
@@ -195,6 +214,7 @@ public:
         img_posit->setText(QString());
         label_co->setText(QString());
         connect_forced->setText(QCoreApplication::translate("MainWindow", "Connection forc\303\251", nullptr));
+        lumiere_amb->setText(QString());
     } // retranslateUi
 
 };

@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    ui->input_ip->setText("Mettre ici adresse IP");
+    ui->input_port->setText("Mettre ici le port");
 
     init_image();
 
@@ -101,7 +102,72 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-    donnee_recue->_liste();
+    QString message = donnee_recue->decrypter_data(reponse);
+
+
+    if(message[0] == '-')
+    {
+        if (message == "-connection")
+        {
+            ui->input_ip->setText("Connected");
+            ui->input_port->setText("Mode force = désactivé");
+            ui->action_status->setText("");
+        }
+
+        else if (message == "-deconnexion" || message == "-deconnexion-delai-depasse")
+        {
+            ui->input_ip->setText("Mettre ici adresse IP");
+            ui->input_port->setText("Mettre ici le port");
+            ui->action_status->setText("");
+        }
+
+        else if (message == "-connection-force")
+        {
+            ui->input_ip->setText("Connection forcée");
+            ui->input_port->setText("Mode force = activé");
+            ui->action_status->setText("");
+        }
+
+        else if (message == "-Inactivite-detecte")
+        {
+            ui->input_ip->setText("Attention inactivité détécté");
+            ui->input_port->setText("Mode force = désactivé");
+            ui->action_status->setText("");
+        }
+
+        else if (message == "-action_effectue")
+        {
+            ui->action_status->setText("Action effectué");
+        }
+
+        else
+        {
+            ui->input_ip->setText("Erreur message");
+            ui->action_status->setText("Réponce reçue...");
+            ui->input_port->setText(reponse);
+        }
+    }
+
+    else
+    {
+        donnee_recue->separer_data(message);
+
+        QStringList list = donnee_recue->_liste();
+
+        QString taux_snirium = list[0];//
+        QString obstacle = list[1];//
+        QString angle_gauch = list[2];
+        QString angle_droit = list[3];
+        QString lumiere_ambiante = list[4];
+
+
+
+        ui->txt_dst_obstacle->setText(obstacle);
+        ui->angle_gauche->setText(angle_gauch);
+        ui->angle_droit->setText(angle_droit);
+        ui->lumiere_amb->setText(lumiere_ambiante);
+        ui->txt_snirium->setText(taux_snirium);
+    }
 }
 
 

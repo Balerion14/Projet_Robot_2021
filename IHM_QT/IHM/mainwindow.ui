@@ -28,6 +28,9 @@
       <height>1080</height>
      </rect>
     </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -371,6 +374,55 @@
       <width>350</width>
       <height>30</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="action_status">
+    <property name="geometry">
+     <rect>
+      <x>1025</x>
+      <y>55</y>
+      <width>350</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="angle_droit">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>400</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="angle_gauche">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>430</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lumiere_amb">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>500</y>
+      <width>113</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhHiddenText</set>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
