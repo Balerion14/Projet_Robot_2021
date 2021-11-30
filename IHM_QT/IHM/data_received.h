@@ -2,6 +2,7 @@
 #define DATA_RECEIVED_H
 
 #include <QMainWindow>
+#include <QDebug>
 
 class data_received
 {
@@ -19,8 +20,7 @@ public:
 private:
 
     QStringList liste;
-    QChar key = 'x';
-
+    QChar key_cryptage = 'x';
 };
 
 #endif // DATA_RECEIVED_H

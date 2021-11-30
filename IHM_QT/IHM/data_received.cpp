@@ -1,4 +1,9 @@
 #include "data_received.h"
+#include <sstream>
+#include <iomanip>
+#include <stdlib.h>
+
+
 
 
 
@@ -18,16 +23,16 @@ QStringList data_received::data_received::_liste()
 
 QString data_received::decrypter_data(QString data_crypted)
 {
-        //Declarations variables
-        QString dec;
+    //Declarations variables
+    QString dec;
 
-        for (int i = 0; i < data_crypted.size(); i++)
-        {
-            dec += data_crypted[i] ^ (int(key) + i) % 20;
-        }
+    for (int i = 0; i < data_crypted.size(); i++)
+    {
+        dec += QChar(data_crypted[i].toLatin1() ^ (static_cast<int>(key_cryptage.toLatin1()) + i) % 20);
+    }
 
-        //Retourner valeur crypte
-        return dec;
+    //Retourner valeur crypte
+    return dec;
 }
 
 

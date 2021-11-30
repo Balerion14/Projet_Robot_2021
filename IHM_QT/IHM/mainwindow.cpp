@@ -18,14 +18,26 @@ MainWindow::MainWindow(QWidget *parent)
 
     display_image();
 
+
     // Attachement d'un slot qui sera appelé à chaque fois que des données arrivent (mode asynchrone)
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(gerer_donnees()));
 
     // Association du "tick" du timer à l'appel d'une méthode SLOT
-    connect(pTimer, SIGNAL(timeout()), this, SLOT(on_connect_forced_clicked()));
+    connect(pTimer, SIGNAL(timeout()), this, SLOT(demander_trames()));
 
     // Idem pour les erreurs
     connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(afficher_erreur(QAbstractSocket::SocketError)));
+
+    qDebug() << donnee_recue->decrypter_data("lnpjw") << "\n";
+
+}
+
+void MainWindow::demander_trames()
+{
+    QByteArray requete2 = "T";
+
+    tcpSocket->write(requete2);
+    qDebug() << requete2 << "\n";
 }
 
 MainWindow::~MainWindow()
@@ -54,7 +66,6 @@ void MainWindow::init_image()
     pConnected = new QImage();
     pDisconnected = new QImage();
     donnee_recue = new data_received();
-
     tcpSocket = new QTcpSocket();
     pTimer = new QTimer();
 }
@@ -78,8 +89,11 @@ void MainWindow::display_image()
     ui->label_banderole->setPixmap(QPixmap::fromImage(*pBanderole));
     ui->img_angle->setPixmap(QPixmap::fromImage(*pAngle));
     ui->img_posit->setPixmap(QPixmap::fromImage(*pPosition));
-    //ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
-    //ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
+    ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
+
+    ui->connect_button->setEnabled(true);
+    ui->connect_forced->setEnabled(false);
+    ui->disconnect_button->setEnabled(false);
 }
 
 
@@ -87,26 +101,16 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-    donnee_recue->_liste(1);
+    donnee_recue->_liste();
 }
+
+
 
 
 
 void MainWindow::on_connect_forced_clicked()
 {    
-    if (verif1 == false)
-    {
-        // Préparation de la requête
-        QByteArray message;
-        QByteArray requete = "F";
 
-        // Envoi de la requête
-        tcpSocket->write(requete);
-
-        verif1 = true;
-    }
-    else
-    {
         // Préparation de la requête
         QByteArray message;
         QByteArray requete = "T";
@@ -114,14 +118,24 @@ void MainWindow::on_connect_forced_clicked()
         // Envoi de la requête
         tcpSocket->write(requete);
 
-        //lancement timer
-        pTimer->start(1000);
-    }
+        ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
+
+        ui->connect_button->setEnabled(false);
+        ui->connect_forced->setEnabled(false);
+        ui->disconnect_button->setEnabled(true);
 }
+
+
+
 
 
 void MainWindow::on_connect_button_clicked()
 {
+    ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
+    ui->connect_button->setEnabled(false);
+    ui->connect_forced->setEnabled(true);
+    ui->disconnect_button->setEnabled(true);
+
     // Récupération des paramètres
     QString adresse_ip = ui->input_ip->text();
     unsigned short port_tcp = ui->input_port->text().toInt();
@@ -130,12 +144,17 @@ void MainWindow::on_connect_button_clicked()
     tcpSocket->connectToHost(adresse_ip, port_tcp);
 
     // Préparation de la requête
-    QByteArray message;
-    QByteArray requete = "alpha-go";
+    QByteArray requete1 = "alpha-go";
 
     // Envoi de la requête
-    tcpSocket->write(requete);
+    tcpSocket->write(requete1);
+    qDebug() << requete1 << "\n";
+
+    pTimer -> start(1000);
 }
+
+
+
 
 
 void MainWindow::on_disconnect_button_clicked()
@@ -153,11 +172,22 @@ void MainWindow::on_disconnect_button_clicked()
     // Déconnexion du serveur
     tcpSocket->close();
 
-    // Message de débug
-    qDebug()<<"Deconnecter";
 
-    verif1 = false;
+    ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
+
+    ui->connect_button->setEnabled(true);
+    ui->connect_forced->setEnabled(false);
+    ui->disconnect_button->setEnabled(false);
+
+    pTimer->stop();
+
+    // Message de débug
+    qDebug() << "deconnected" << "\n";
+    verif = true;
 }
+
+
+
 
 
 void MainWindow::on_high_Button_clicked()
@@ -170,6 +200,19 @@ void MainWindow::on_high_Button_clicked()
     tcpSocket->write(requete);
 }
 
+void MainWindow::on_high_Button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
+
+
 
 void MainWindow::on_up_button_clicked()
 {
@@ -180,6 +223,19 @@ void MainWindow::on_up_button_clicked()
     // Envoi de la requête
     tcpSocket->write(requete);
 }
+
+void MainWindow::on_up_button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
+
 
 
 void MainWindow::on_low_button_clicked()
@@ -192,6 +248,19 @@ void MainWindow::on_low_button_clicked()
     tcpSocket->write(requete);
 }
 
+void MainWindow::on_low_button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
+
+
 
 void MainWindow::on_left_button_clicked()
 {
@@ -202,6 +271,20 @@ void MainWindow::on_left_button_clicked()
     // Envoi de la requête
     tcpSocket->write(requete);
 }
+
+void MainWindow::on_left_button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
+
+
 
 void MainWindow::on_stop_button_clicked()
 {
@@ -214,6 +297,9 @@ void MainWindow::on_stop_button_clicked()
 }
 
 
+
+
+
 void MainWindow::on_right_button_clicked()
 {
     // Préparation de la requête
@@ -223,6 +309,19 @@ void MainWindow::on_right_button_clicked()
     // Envoi de la requête
     tcpSocket->write(requete);
 }
+
+void MainWindow::on_right_button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
+
 
 
 void MainWindow::on_down_button_clicked()
@@ -234,6 +333,18 @@ void MainWindow::on_down_button_clicked()
     // Envoi de la requête
     tcpSocket->write(requete);
 }
+
+void MainWindow::on_down_button_released()
+{
+    // Préparation de la requête
+    QByteArray message;
+    QByteArray requete = "C";
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+}
+
+
 
 
 

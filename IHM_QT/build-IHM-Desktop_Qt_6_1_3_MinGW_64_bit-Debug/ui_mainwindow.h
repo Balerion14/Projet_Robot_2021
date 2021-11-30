@@ -139,6 +139,7 @@ public:
         connect_forced->setObjectName(QString::fromUtf8("connect_forced"));
         connect_forced->setGeometry(QRect(1375, 55, 150, 30));
         connect_forced->setFont(font4);
+        connect_forced->setCheckable(false);
         input_port = new QLineEdit(centralwidget);
         input_port->setObjectName(QString::fromUtf8("input_port"));
         input_port->setGeometry(QRect(1025, 100, 350, 30));

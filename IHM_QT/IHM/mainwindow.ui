@@ -349,6 +349,9 @@
     <property name="text">
      <string>Connection forcé</string>
     </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="input_port">
     <property name="geometry">

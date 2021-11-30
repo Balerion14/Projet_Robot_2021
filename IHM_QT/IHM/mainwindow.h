@@ -7,6 +7,7 @@
 #include <iostream>
 #include <QTimer>
 #include "data_received.h"
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -54,6 +55,20 @@ private slots:
 
     void on_down_button_clicked();
 
+    void on_high_Button_released();
+
+    void on_up_button_released();
+
+    void on_low_button_released();
+
+    void on_left_button_released();
+
+    void on_right_button_released();
+
+    void on_down_button_released();
+
+    void demander_trames();
+
 private:
     // Object instanciation part
     Ui::MainWindow *ui;
@@ -70,6 +85,6 @@ private:
     QImage *pDisconnected;
     QPixmap image;
 
-    bool verif1 = false;
+    bool verif = true;
 };
 #endif // MAINWINDOW_H
