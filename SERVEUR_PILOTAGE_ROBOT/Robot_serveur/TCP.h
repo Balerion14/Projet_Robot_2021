@@ -1,3 +1,6 @@
+#ifndef TCP_H
+#define TCP_H
+
 // Librairies utilisées
 #include <iostream>
 #include <unistd.h>
@@ -120,4 +123,4 @@ public:
 	*/
 	void End_timer();
 };
-
+#endif

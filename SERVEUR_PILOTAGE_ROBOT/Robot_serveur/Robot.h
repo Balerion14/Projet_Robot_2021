@@ -337,7 +337,7 @@ public:
 	* Renvoi les infos des capteurs dans un tableau "Robot".
 	* return un std::array
 	*/
-	std::array<int, 5>& Renvoi_infos_capteur();
+	std::array<int, 5> Renvoi_infos_capteur();//&
 
 	/**
 	* Méthode de la classe "Robot"

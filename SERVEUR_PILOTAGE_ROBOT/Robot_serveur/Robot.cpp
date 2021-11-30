@@ -364,7 +364,7 @@ void Robot::recupererPositionsDesMoteurs(int& positionGauche, int& positionCentr
 	positionDroite = pMoteurDroit->position();
 }
 
-std::array<int, 5>& Robot::Renvoi_infos_capteur()
+std::array<int, 5> Robot::Renvoi_infos_capteur()//&
 {
 	//Declaration tableau
 	std::array<int, 5> tableau;
@@ -477,7 +477,7 @@ std::string Robot::evaluate_action_robot(std::string requete)
 	//Sinon on fait appelle à la methode qui gère les actions du robot
 	else
 	{
-		return "action_effectue";
+		return "-action_effectue";
 	}
 }
 
