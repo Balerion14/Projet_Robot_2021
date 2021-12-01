@@ -121,7 +121,7 @@ void MainWindow::gerer_donnees()
             ui->action_status->setText("Mode force = désactivé");
         }
 
-        else if (message == "-connection-force")
+        else if (message == "-connection_force_active")
         {
             ui->input_ip->setText("Connection forcée");
             ui->input_port->setText("");
