@@ -8,7 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    ui->input_ip->setText("Mettre ici adresse IP");
+    ui->input_port->setText("Mettre ici le port");
 
     init_image();
 
@@ -45,8 +46,8 @@ MainWindow::~MainWindow()
     delete pTimer;
     delete pBackground;
     delete pBanderole;
-    delete pPosition;
-    delete pAngle;
+    delete pAngleD;
+    delete pAngleG;
     delete pConnected;
     delete pDisconnected;
     delete donnee_recue;
@@ -61,8 +62,8 @@ void MainWindow::init_image()
 {
     pBackground = new QImage();
     pBanderole = new QImage();
-    pPosition = new QImage();
-    pAngle = new QImage();
+    pAngleD = new QImage();
+    pAngleG = new QImage();
     pConnected = new QImage();
     pDisconnected = new QImage();
     donnee_recue = new data_received();
@@ -75,8 +76,8 @@ void MainWindow::load_image()
 {
     pBackground->load("Background.png");
     pBanderole->load("Banderole.png");
-    pAngle->load("Tableau_angle.png");
-    pPosition->load("Tableau_position.png");
+    pAngleG->load("Tableau_angle_gauche.png");
+    pAngleD->load("Tableau_angle_droit.png");
     pConnected->load("connecte.png");
     pDisconnected->load("non_connecte.png");
 }
@@ -87,8 +88,8 @@ void MainWindow::display_image()
 {
     ui->label_background->setPixmap(QPixmap::fromImage(*pBackground));
     ui->label_banderole->setPixmap(QPixmap::fromImage(*pBanderole));
-    ui->img_angle->setPixmap(QPixmap::fromImage(*pAngle));
-    ui->img_posit->setPixmap(QPixmap::fromImage(*pPosition));
+    ui->img_angle->setPixmap(QPixmap::fromImage(*pAngleG));
+    ui->img_posit->setPixmap(QPixmap::fromImage(*pAngleD));
     ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
 
     ui->connect_button->setEnabled(true);
@@ -101,7 +102,71 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-    donnee_recue->_liste();
+    QString message = donnee_recue->decrypter_data(reponse);
+
+
+    if(message[0] == '-')
+    {
+        if (message == "-connection")
+        {
+            ui->input_ip->setText("Connected");
+            ui->input_port->setText("");
+            ui->action_status->setText("Mode force = désactivé");
+        }
+
+        else if (message == "-deconnexion" || message == "-deconnexion-delai-depasse")
+        {
+            ui->input_ip->setText("Mettre ici adresse IP");
+            ui->input_port->setText("Mettre ici le port");
+            ui->action_status->setText("Mode force = désactivé");
+        }
+
+        else if (message == "-connection-force")
+        {
+            ui->input_ip->setText("Connection forcée");
+            ui->input_port->setText("");
+            ui->action_status->setText("Mode force = activé");
+        }
+
+        else if (message == "-Inactivite-detecte")
+        {
+            ui->input_ip->setText("Attention inactivité détécté");
+            ui->input_port->setText("");
+            ui->action_status->setText("Mode force = désactivé");
+        }
+
+        else if (message == "-action_effectue")
+        {
+            ui->action_status->setText("Action effectué");
+        }
+
+        else
+        {
+            ui->input_ip->setText("Erreur message");
+            ui->action_status->setText("Réponce reçue...");
+            ui->input_port->setText(reponse);
+        }
+    }
+
+    else
+    {
+        donnee_recue->separer_data(message);
+
+        QStringList list = donnee_recue->_liste();
+
+        QString taux_snirium = list[0];//
+        QString obstacle = list[1];//
+        QString angle_gauch = list[2];
+        QString angle_droit = list[3];
+        QString angle_robot = list[4];
+
+
+        ui->txt_dst_obstacle->setText(obstacle);
+        ui->labelangle_g->setText(angle_gauch);
+        ui->labelangle_d->setText(angle_droit);
+        ui->labelangle->setText(angle_robot);
+        ui->txt_snirium->setText(taux_snirium);
+    }
 }
 
 
@@ -113,7 +178,7 @@ void MainWindow::on_connect_forced_clicked()
 
         // Préparation de la requête
         QByteArray message;
-        QByteArray requete = "T";
+        QByteArray requete = "connexion-force"; // REQUETE A VERIFIER
 
         // Envoi de la requête
         tcpSocket->write(requete);
@@ -123,6 +188,9 @@ void MainWindow::on_connect_forced_clicked()
         ui->connect_button->setEnabled(false);
         ui->connect_forced->setEnabled(false);
         ui->disconnect_button->setEnabled(true);
+
+        qDebug() << requete << "\n";
+
 }
 
 
@@ -161,13 +229,10 @@ void MainWindow::on_disconnect_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "deconnecte";
+    QByteArray requete = "deconnecte"; // REQUETE A VERIFIER
 
     // Envoi de la requête
     tcpSocket->write(requete);
-
-    // Association du "tick" du timer à l'appel d'une méthode SLOT
-    connect(pTimer, SIGNAL(timeout()), this, SLOT(on_connect_forced_clicked()));
 
     // Déconnexion du serveur
     tcpSocket->close();
@@ -182,8 +247,7 @@ void MainWindow::on_disconnect_button_clicked()
     pTimer->stop();
 
     // Message de débug
-    qDebug() << "deconnected" << "\n";
-    verif = true;
+    qDebug() << "deconnecte" << "\n";
 }
 
 
@@ -270,6 +334,8 @@ void MainWindow::on_left_button_clicked()
 
     // Envoi de la requête
     tcpSocket->write(requete);
+
+    qDebug() << "LEFTCLIC" << "\n";
 }
 
 void MainWindow::on_left_button_released()
@@ -280,6 +346,8 @@ void MainWindow::on_left_button_released()
 
     // Envoi de la requête
     tcpSocket->write(requete);
+
+    qDebug() << "LEFTRELEASE" << "\n";
 }
 
 
@@ -332,6 +400,8 @@ void MainWindow::on_down_button_clicked()
 
     // Envoi de la requête
     tcpSocket->write(requete);
+
+
 }
 
 void MainWindow::on_down_button_released()

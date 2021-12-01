@@ -28,6 +28,9 @@
       <height>1080</height>
      </rect>
     </property>
+    <property name="inputMethodHints">
+     <set>Qt::ImhNone</set>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -43,8 +46,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold Condensed</family>
-      <pointsize>11</pointsize>
+      <family>Power Green Narrow</family>
+      <pointsize>13</pointsize>
      </font>
     </property>
     <property name="text">
@@ -65,8 +68,14 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold SemiConden</family>
-      <pointsize>14</pointsize>
+      <family>Power Green Narrow</family>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="text">
@@ -87,8 +96,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold SemiConden</family>
-      <pointsize>11</pointsize>
+      <family>Power Green Narrow</family>
+      <pointsize>13</pointsize>
      </font>
     </property>
     <property name="text">
@@ -109,8 +118,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold SemiConden</family>
-      <pointsize>11</pointsize>
+      <family>Power Green Narrow</family>
+      <pointsize>13</pointsize>
      </font>
     </property>
     <property name="text">
@@ -131,8 +140,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold SemiConden</family>
-      <pointsize>11</pointsize>
+      <family>Power Green Narrow</family>
+      <pointsize>13</pointsize>
      </font>
     </property>
     <property name="text">
@@ -153,7 +162,8 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <family>Power Green</family>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
@@ -171,6 +181,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Power Green</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -218,7 +229,7 @@
     </property>
     <property name="font">
      <font>
-      <family>Power Green</family>
+      <family>Power Green Small</family>
       <pointsize>16</pointsize>
      </font>
     </property>
@@ -231,13 +242,13 @@
      <rect>
       <x>600</x>
       <y>65</y>
-      <width>200</width>
+      <width>201</width>
       <height>50</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Power Green</family>
+      <family>Power Green Small</family>
       <pointsize>16</pointsize>
      </font>
     </property>
@@ -256,10 +267,10 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold Condensed</family>
-      <pointsize>11</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Power Green Narrow</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
@@ -280,10 +291,10 @@
     </property>
     <property name="font">
      <font>
-      <family>Bahnschrift SemiBold Condensed</family>
-      <pointsize>11</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Power Green Narrow</family>
+      <pointsize>14</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
@@ -343,7 +354,8 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <family>Power Green</family>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
@@ -362,6 +374,15 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Power Green</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Mettre ici le port</string>
+    </property>
    </widget>
    <widget class="QLineEdit" name="input_ip">
     <property name="geometry">
@@ -371,6 +392,91 @@
       <width>350</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Power Green</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Mettre ici adresse IP</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="action_status">
+    <property name="geometry">
+     <rect>
+      <x>1025</x>
+      <y>55</y>
+      <width>350</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Power Green</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Mode force = désactivé</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelangle_g">
+    <property name="geometry">
+     <rect>
+      <x>1050</x>
+      <y>710</y>
+      <width>120</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Power Green Small</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>XXXXXXXXXX</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelangle_d">
+    <property name="geometry">
+     <rect>
+      <x>1400</x>
+      <y>710</y>
+      <width>120</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Power Green Small</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>XXXXXXXXXX</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelangle">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>55</y>
+      <width>75</width>
+      <height>75</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Power Green Small</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>XXXXXX</string>
     </property>
    </widget>
   </widget>
