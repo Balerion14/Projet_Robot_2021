@@ -393,6 +393,9 @@ void Robot::do_action_robot(std::string requete)
 		//Puissance moteur pour aller tout droit
 		changerPuissanceMoteurs(100, 0, 100);
 
+		//Message debug
+		cout << "avancer" << endl;
+
 		//Sortir du cas
 	    break;
 
@@ -400,6 +403,9 @@ void Robot::do_action_robot(std::string requete)
 
 		//Puissance moteur pour reculer
 		changerPuissanceMoteurs(-100, 0, -100);
+
+		//Message debug
+		cout << "reculer" << endl;
 
 		//Sortir du cas
 		break;
@@ -409,6 +415,9 @@ void Robot::do_action_robot(std::string requete)
 		//Puissance moteur pour aller à gauche
 		changerPuissanceMoteurs(-100, 0, 100);
 
+		//Message debug
+		cout << "gauche" << endl;
+
 		//Sortir du cas
 		break;
 
@@ -416,6 +425,9 @@ void Robot::do_action_robot(std::string requete)
 
 		//Puissance moteur pour aller à droite
 		changerPuissanceMoteurs(100, 0, -100);
+
+		//Message debug
+		cout << "droit" << endl;
 
 		//Sortir du cas
 		break;
@@ -425,6 +437,9 @@ void Robot::do_action_robot(std::string requete)
 		//Puissance moteur arreter le robot
 		changerPuissanceMoteurs(0, 0, 0);
 
+		//Message debug
+		cout << "stop" << endl;
+
 		//Sortir du cas
 		break;
 
@@ -432,6 +447,9 @@ void Robot::do_action_robot(std::string requete)
 
 		//Puissance moteur pour monter bras
 		changerPuissanceMoteurs(0, 100, 0);
+
+		//Message debug
+		cout << "monter bras" << endl;
 
 		//Sortir du cas
 		break;
@@ -441,6 +459,9 @@ void Robot::do_action_robot(std::string requete)
 		//Puissance moteur pour descendre bras
 		changerPuissanceMoteurs(0, -100, 0);
 
+		//Message debug
+		cout << "descendre bras" << endl;
+
 		//Sortir du cas
 		break;
 
@@ -448,6 +469,9 @@ void Robot::do_action_robot(std::string requete)
 
 		//Puissance moteur pour aller tout droit
 		changerPuissanceMoteurs(0, 0, 0);
+
+		//Message debug
+		cout << "commande pas default stop" << endl;
 
 		//Sortir du cas
 		break;
@@ -472,11 +496,17 @@ std::string Robot::evaluate_action_robot(std::string requete)
 	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère transforme csv et recup capteurs
 	if (requete[0] == SEND_INFOS)
 	{
+		//Message debug
+		cout << "transformation csv" << endl;
+
 		return transforme_CSV(Renvoi_infos_capteur());
 	}
 	//Sinon on fait appelle à la methode qui gère les actions du robot
 	else
 	{
+		//Message debug
+		cout << "action effectue" << endl;
+
 		return "-action_effectue";
 	}
 }
