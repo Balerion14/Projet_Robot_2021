@@ -36,7 +36,7 @@ TCP::TCP(int port)
 	//Condition en cas d'erreur
 	if (resultat < 0)
 	{
-		cout << "ERREUR DE PORT" << endl;
+		std::cout << "ERREUR DE PORT" << endl;
 		exit -1;
 	}
 
@@ -72,7 +72,7 @@ void TCP::creation_new_socket()
 					donnee->activation3 == true;
 
 					//Message pour le debug
-					cout << "demande connexion active" << endl;
+					std::cout << "demande connexion active" << endl;
 			}
 
 			//Verification si le robot veut une connexion en continu(connexion force->IHM), (peut etre rajout de active 3 = true)
@@ -81,7 +81,7 @@ void TCP::creation_new_socket()
 				donnee->activation4 == true;
 
 				//Message pour le debug
-				cout << "demande connexion force active" << endl;
+				std::cout << "demande connexion force active" << endl;
 			}
 
 			//Appel methode pour savoir si on doit ou pas activer le timer ou bien si on doit le reset
@@ -103,14 +103,14 @@ void TCP::creation_new_socket()
 				donnee->activation2 = true;
 
 				//Message pour le debug
-				cout << "deconnexion" << endl;
+				std::cout << "deconnexion" << endl;
 
 				//Sortie boucle
 				break;
 			}
 
 			//on verifie aussi qu'il a bien effectue la premiere connexion 
-			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true)
+			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true && (reponse == "Z" || reponse == "S" || reponse == "Q" || reponse == "D" || reponse == "C" || reponse == "A" || reponse == "E" || reponse == "T"))
 			{
 	            //Appel fonction qui va determiner quel action faire(bouger robot ou envoyer donnee)
 				std::string message = robot->evaluate_action_robot(reponse);
@@ -122,7 +122,7 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(reponse);
 
 					//Message pour le debug
-					cout << "action effectue" << endl;
+					std::cout << "action effectue" << endl;
 				}
 				else
 				{
@@ -130,7 +130,7 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(message_crypte);
 
 					//Message pour le debug
-					cout << "envoi trame" << endl;
+					std::cout << "envoi trame" << endl;
 				}		
 			}
 
@@ -145,7 +145,7 @@ void TCP::creation_new_socket()
 				robot->parler(reponse, true);
 
 				//Message pour le debug
-				cout << "connexion" << endl;
+				std::cout << "connexion" << endl;
 			}
 
 			//Si il ne se passe aucune action donc que aucune des conditions n'est été utilisé alors on attend 20 seconde
@@ -170,7 +170,7 @@ void TCP::creation_new_socket()
 						robot->parler(reponse, true);
 
 						//Message pour le debug
-						cout << "inactivite detecte" << endl;
+						std::cout << "inactivite detecte" << endl;
 					}
 
 					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante au bout d'un certains temps
@@ -184,7 +184,7 @@ void TCP::creation_new_socket()
 						robot->parler(reponse, true);
 
 						//Message pour le debug
-						cout << "deconnexion delai depasse" << endl;
+						std::cout << "deconnexion delai depasse" << endl;
 
 						//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
 						break;
@@ -198,7 +198,7 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(reponse);
 
 					//Message pour le debug
-					cout << "connexion force" << endl;
+					std::cout << "connexion force" << endl;
 				}
 			}
 		}
@@ -215,24 +215,30 @@ void TCP::creation_new_socket()
 		//remise à 0 du mode reset du timer apres une deconnexion d'un client
 		donnee->activation5 = false;
 
+		//Remise à 0 du temps attente
+		donnee->time_total = 0;
+
 		//fermeture client pour en attendre un autre
 		close_socket_client();
 
 		//Message pour le debug
-		cout << "deconnexion client" << endl;
+		std::cout << "deconnexion client" << endl;
 
 		//Si le bouton centrale est enfonce alors on ferme le socket et fin
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
-			close_socket_serveur();
+			//Sortie de la boucle while principale si on appui sur bouton
 			donnee->activation = true;
 
 			//Message pour le debug
-			cout << "deconnexion serveur" << endl;
+			std::cout << "deconnexion serveur" << endl;
+
+			//Fermeture socket serveur
+			close_socket_serveur();
 
 			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
 			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7v8v9.5
+			//...123v4v5v6.1.1v7v8v9.5v10
 		}
 	}
 }
