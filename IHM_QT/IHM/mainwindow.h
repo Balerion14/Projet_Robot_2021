@@ -79,8 +79,8 @@ private:
     // Picture part
     QImage *pBackground;
     QImage *pBanderole;
-    QImage *pAngle;
-    QImage *pPosition;
+    QImage *pAngleD;
+    QImage *pAngleG;
     QImage *pConnected;
     QImage *pDisconnected;
     QPixmap image;
