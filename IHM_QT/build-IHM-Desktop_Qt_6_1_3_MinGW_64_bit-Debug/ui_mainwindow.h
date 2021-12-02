@@ -46,6 +46,7 @@ public:
     QLabel *labelangle_g;
     QLabel *labelangle_d;
     QLabel *labelangle;
+    QPushButton *STOP;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -165,6 +166,9 @@ public:
         labelangle->setObjectName(QString::fromUtf8("labelangle"));
         labelangle->setGeometry(QRect(400, 55, 75, 75));
         labelangle->setFont(font4);
+        STOP = new QPushButton(centralwidget);
+        STOP->setObjectName(QString::fromUtf8("STOP"));
+        STOP->setGeometry(QRect(1030, 270, 141, 71));
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
@@ -210,12 +214,16 @@ public:
         img_posit->setText(QString());
         label_co->setText(QString());
         connect_forced->setText(QCoreApplication::translate("MainWindow", "Connection forc\303\251", nullptr));
-        input_port->setText(QCoreApplication::translate("MainWindow", "Mettre ici le port", nullptr));
-        input_ip->setText(QCoreApplication::translate("MainWindow", "Mettre ici adresse IP", nullptr));
-        action_status->setText(QCoreApplication::translate("MainWindow", "Mode force = d\303\251sactiv\303\251", nullptr));
+        input_port->setText(QString());
+        input_port->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mettre ici le port", nullptr));
+        input_ip->setText(QString());
+        input_ip->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mettre ici adresse IP", nullptr));
+        action_status->setText(QString());
+        action_status->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mode force = d\303\251sactiv\303\251", nullptr));
         labelangle_g->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXX", nullptr));
         labelangle_d->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXX", nullptr));
         labelangle->setText(QCoreApplication::translate("MainWindow", "XXXXXX", nullptr));
+        STOP->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
     } // retranslateUi
 
 };

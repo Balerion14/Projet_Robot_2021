@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Idem pour les erreurs
     connect(tcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(afficher_erreur(QAbstractSocket::SocketError)));
 
-    qDebug() << donnee_recue->decrypter_data("lnpjw") << "\n";
+    //qDebug() << donnee_recue->decrypter_data("lnpjw") << "\n";
 
 }
 
@@ -38,7 +38,7 @@ void MainWindow::demander_trames()
     QByteArray requete2 = "T";
 
     tcpSocket->write(requete2);
-    qDebug() << requete2 << "\n";
+    qDebug() << "IHM => " << requete2 << "\n";
 }
 
 MainWindow::~MainWindow()
@@ -102,8 +102,8 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-    qDebug() << reponse[0];
-    qDebug() << reponse[1];
+    qDebug() << "Robot => " << reponse[0];
+    qDebug() << "Robot => " << reponse[1];
 
     if(reponse[0] == '-')
     {
@@ -140,6 +140,8 @@ void MainWindow::gerer_donnees()
 
     else
     {
+        ///si message crypte commence par - alors elle n'est pas traitée
+
         QString message = donnee_recue->decrypter_data(reponse);
         donnee_recue->separer_data(message);
 
@@ -191,7 +193,7 @@ void MainWindow::on_connect_button_clicked()
 
     // Envoi de la requête
     tcpSocket->write(requete1);
-    qDebug() << requete1 << "\n";
+    qDebug() << "IHM => " << requete1 << "\n";
 
     pTimer -> start(1000);
 }
@@ -230,20 +232,22 @@ void MainWindow::on_high_Button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "A";
+    QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 void MainWindow::on_high_Button_released()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "C";
+    QByteArray requete = "A";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 
@@ -254,20 +258,22 @@ void MainWindow::on_up_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "Z";
+    QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 void MainWindow::on_up_button_released()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "C";
+    QByteArray requete = "Z";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 
@@ -278,20 +284,22 @@ void MainWindow::on_low_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "E";
+    QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 void MainWindow::on_low_button_released()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "C";
+    QByteArray requete = "E";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 
@@ -302,24 +310,24 @@ void MainWindow::on_left_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "Q";
+    QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
 
-    qDebug() << "LEFTCLIC" << "\n";
+    qDebug() << "IHM => " << "LEFTCLIC" << "\n";
 }
 
 void MainWindow::on_left_button_released()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "C";
+    QByteArray requete = "Q";
 
     // Envoi de la requête
     tcpSocket->write(requete);
 
-    qDebug() << "LEFTRELEASE" << "\n";
+    qDebug() << "IHM => " << "LEFTRELEASE" << "\n";
 }
 
 
@@ -329,20 +337,22 @@ void MainWindow::on_right_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "D";
+    QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 void MainWindow::on_right_button_released()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "C";
+    QByteArray requete = "D";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 
@@ -353,10 +363,11 @@ void MainWindow::on_down_button_clicked()
 {
     // Préparation de la requête
     QByteArray message;
-    QByteArray requete = "S";
+    QByteArray requete = "C";//inverser
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 
 
 }
@@ -365,10 +376,24 @@ void MainWindow::on_down_button_released()
 {
     // Préparation de la requête
     QByteArray message;
+    QByteArray requete = "S";//inverser
+
+    // Envoi de la requête
+    tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
+}
+
+
+
+void MainWindow::on_STOP_clicked()
+{
+    // Préparation de la requête
+    QByteArray message;
     QByteArray requete = "C";
 
     // Envoi de la requête
     tcpSocket->write(requete);
+    qDebug() << "IHM => " << requete << "\n";
 }
 
 
@@ -395,3 +420,4 @@ void MainWindow::afficher_erreur(QAbstractSocket::SocketError socketError)
                                      .arg(tcpSocket->errorString()));
     }
 }
+

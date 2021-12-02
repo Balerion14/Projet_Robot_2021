@@ -67,7 +67,9 @@ private slots:
 
     void demander_trames();
 
-    void remplir_bdd(QString taux_snirium, QString obstacle, QString angle_gauch, QString angle_droit, QString angle_robot);
+    //void remplir_bdd(QString taux_snirium, QString obstacle, QString angle_gauch, QString angle_droit, QString angle_robot);
+
+    void on_STOP_clicked();
 
 private:
     // Object instanciation part

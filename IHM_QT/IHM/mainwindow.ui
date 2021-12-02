@@ -353,6 +353,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mettre ici le port</string>
     </property>
    </widget>
@@ -372,6 +375,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mettre ici adresse IP</string>
     </property>
    </widget>
@@ -391,6 +397,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mode force = désactivé</string>
     </property>
    </widget>
@@ -449,6 +458,19 @@
     </property>
     <property name="text">
      <string>XXXXXX</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="STOP">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>270</y>
+      <width>141</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
   </widget>
