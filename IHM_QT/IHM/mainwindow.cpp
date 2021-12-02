@@ -102,40 +102,30 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
-    QString message = donnee_recue->decrypter_data(reponse);
+    qDebug() << reponse[0];
+    qDebug() << reponse[1];
 
-
-    if(message[0] == '-')
+    if(reponse[0] == '-')
     {
-        if (message == "-connection")
+        if (reponse == "-connection")
         {
             ui->input_ip->setText("Connected");
             ui->input_port->setText("");
             ui->action_status->setText("Mode force = désactivé");
+
+            ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
         }
 
-        else if (message == "-deconnexion" || message == "-deconnexion-delai-depasse")
+        else if (reponse == "-deconnexion")
         {
             ui->input_ip->setText("Mettre ici adresse IP");
             ui->input_port->setText("Mettre ici le port");
             ui->action_status->setText("Mode force = désactivé");
+
+            ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
         }
 
-        else if (message == "-connection_force_active")
-        {
-            ui->input_ip->setText("Connection forcée");
-            ui->input_port->setText("");
-            ui->action_status->setText("Mode force = activé");
-        }
-
-        else if (message == "-Inactivite-detecte")
-        {
-            ui->input_ip->setText("Attention inactivité détécté");
-            ui->input_port->setText("");
-            ui->action_status->setText("Mode force = désactivé");
-        }
-
-        else if (message == "-action_effectue")
+        else if (reponse == "-action_effectue")
         {
             ui->action_status->setText("Action effectué");
         }
@@ -150,12 +140,13 @@ void MainWindow::gerer_donnees()
 
     else
     {
+        QString message = donnee_recue->decrypter_data(reponse);
         donnee_recue->separer_data(message);
 
         QStringList list = donnee_recue->_liste();
 
-        QString taux_snirium = list[0];//
-        QString obstacle = list[1];//
+        QString taux_snirium = list[0];
+        QString obstacle = list[1];
         QString angle_gauch = list[2];
         QString angle_droit = list[3];
         QString angle_robot = list[4];
@@ -175,22 +166,7 @@ void MainWindow::gerer_donnees()
 
 void MainWindow::on_connect_forced_clicked()
 {    
-
-        // Préparation de la requête
-        QByteArray message;
-        QByteArray requete = "connexion-force"; // REQUETE A VERIFIER
-
-        // Envoi de la requête
-        tcpSocket->write(requete);
-
-        ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
-
-        ui->connect_button->setEnabled(false);
-        ui->connect_forced->setEnabled(false);
-        ui->disconnect_button->setEnabled(true);
-
-        qDebug() << requete << "\n";
-
+    // A REPROGRAMMER CAR PAS UTILE
 }
 
 
@@ -199,7 +175,6 @@ void MainWindow::on_connect_forced_clicked()
 
 void MainWindow::on_connect_button_clicked()
 {
-    ui->label_co->setPixmap(QPixmap::fromImage(*pConnected));
     ui->connect_button->setEnabled(false);
     ui->connect_forced->setEnabled(true);
     ui->disconnect_button->setEnabled(true);
@@ -236,9 +211,6 @@ void MainWindow::on_disconnect_button_clicked()
 
     // Déconnexion du serveur
     tcpSocket->close();
-
-
-    ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
 
     ui->connect_button->setEnabled(true);
     ui->connect_forced->setEnabled(false);
@@ -349,21 +321,6 @@ void MainWindow::on_left_button_released()
 
     qDebug() << "LEFTRELEASE" << "\n";
 }
-
-
-
-
-
-void MainWindow::on_stop_button_clicked()
-{
-    // Préparation de la requête
-    QByteArray message;
-    QByteArray requete = "C";
-
-    // Envoi de la requête
-    tcpSocket->write(requete);
-}
-
 
 
 
