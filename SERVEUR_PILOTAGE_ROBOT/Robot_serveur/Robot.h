@@ -345,7 +345,7 @@ public:
 	* paramètre string requete
 	* return rien
 	*/
-	void do_action_robot(std::string requete);
+	void do_action_robot(char requete);
 
 	/**
 	* Méthode de la classe "Robot"
@@ -361,7 +361,7 @@ public:
 	* string requete
 	* return string
 	*/
-	std::string evaluate_action_robot(std::string requete);
+	std::string evaluate_action_robot(char requete);
 	
 	/**
 	 * Méthode pour récupérer attribut frequence

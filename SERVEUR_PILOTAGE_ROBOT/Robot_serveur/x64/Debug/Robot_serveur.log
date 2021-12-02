@@ -1,0 +1,9 @@
+﻿  ev3dev.cpp
+C:\Users\Home\Documents\GitHub\Projet_Robot_2021\SERVEUR_PILOTAGE_ROBOT\Robot_serveur\ev3dev.h(1364,37): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Home\Documents\GitHub\Projet_Robot_2021\SERVEUR_PILOTAGE_ROBOT\Robot_serveur\ev3dev.cpp(43,10): fatal error C1083: Impossible d'ouvrir le fichier include : 'dirent.h' : No such file or directory
+  monprog.cpp
+C:\Users\Home\Documents\GitHub\Projet_Robot_2021\SERVEUR_PILOTAGE_ROBOT\Robot_serveur\ev3dev.h(1364,37): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\Users\Home\Documents\GitHub\Projet_Robot_2021\SERVEUR_PILOTAGE_ROBOT\Robot_serveur\TCP.h(6,10): fatal error C1083: Impossible d'ouvrir le fichier include : 'unistd.h' : No such file or directory
+  TCP.cpp
+C:\Users\Home\Documents\GitHub\Projet_Robot_2021\SERVEUR_PILOTAGE_ROBOT\Robot_serveur\TCP.h(6,10): fatal error C1083: Impossible d'ouvrir le fichier include : 'unistd.h' : No such file or directory
+  Génération de code en cours...

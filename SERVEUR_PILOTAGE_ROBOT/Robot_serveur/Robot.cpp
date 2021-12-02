@@ -371,22 +371,22 @@ std::array<int, 5> Robot::Renvoi_infos_capteur()//&
 
 	//Ajout des informations des capteurs dans le tableau
     //Recuperer angle moteur
-	tableau[0] = recupererPositionDuMoteur(GAUCHE);
-	tableau[1] = recupererPositionDuMoteur(DROITE);
+	tableau[0] = recupererPositionDuMoteur(GAUCHE) % 360;
+	tableau[1] = recupererPositionDuMoteur(DROITE) % 360;
 
-	//Distance obstacle(*10 : centimetre->milimètre) et toux de snirium
+	//Distance obstacle(*10 : centimetre->milimètre) et taux de snirium, % 360 pour normalise l angle
 	tableau[2] = recupererDistance() * 10;
-	tableau[3] = recupererGyroscopeAngle();
+	tableau[3] = recupererGyroscopeAngle() % 360;
 	tableau[4] = recupererLumiereAmbiante();
 
 	//Retourner tableau de valeur des capteurs
 	return tableau;
 }
 
-void Robot::do_action_robot(std::string requete)
+void Robot::do_action_robot(char requete)
 {
 	//Choix de l'action à réaliser en fonction de la requete
-	switch (requete[0])
+	switch (requete)
 	{
 	case AVANCER:
 
@@ -491,10 +491,10 @@ std::string Robot::transforme_CSV(const std::array<int, 5> & n)
 	return chaine;
 }
 
-std::string Robot::evaluate_action_robot(std::string requete)
+std::string Robot::evaluate_action_robot(char requete)
 {
 	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère transforme csv et recup capteurs
-	if (requete[0] == SEND_INFOS)
+	if (requete == SEND_INFOS)
 	{
 		//Message debug
 		std::cout << "transformation-csv   _" << endl;
@@ -504,6 +504,9 @@ std::string Robot::evaluate_action_robot(std::string requete)
 	//Sinon on fait appelle à la methode qui gère les actions du robot
 	else
 	{
+		//Faire action
+		do_action_robot(requete);
+
 		//Message debug
 		std::cout << "action-effectue-dans-robot   _" << endl;
 

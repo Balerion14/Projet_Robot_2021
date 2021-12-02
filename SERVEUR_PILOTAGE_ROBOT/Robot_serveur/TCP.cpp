@@ -40,7 +40,7 @@ TCP::TCP(int port)
 	if (resultat < 0)
 	{
 		std::cout << "ERREUR DE PORT" << endl;
-		exit -1;
+		exit(-1);
 	}
 
 	//Message debug
@@ -75,6 +75,9 @@ void TCP::creation_new_socket()
 	    //Tant qu'il y a un client on reste dans la boucle 
 		while (donnee->activation2 == false)
 		{
+			std::cout << "1: " << donnee->activation3 << endl;
+			std::cout << "2: " << donnee->activation2 << endl;
+
 			//Message debug
 			std::cout << "Serveur-trouve-client  " << endl;
 
@@ -97,11 +100,11 @@ void TCP::creation_new_socket()
 				//Message debug
 				std::cout << "Message-envoye-a-IHM:  " << envoi << "_" << endl;
 
+				//sortir boucle
+				donnee->activation2 = true;
+
 				//Envoyer la réponse au client
 				envoi_reponse_client(envoi);
-
-				//sortir boucle
-				donnee->activation2 == true;
 			}
 
 			//Condition pour la connexion du client
@@ -116,19 +119,20 @@ void TCP::creation_new_socket()
 				//Message debug
 				std::cout << "Message-envoye-a-IHM:  " << envoi << "_" << endl;
 
+				//premiere connexion effectue
+				donnee->activation3 = true;
+
 				//Envoyer la réponse au client
 				envoi_reponse_client(envoi);
 
-				//premiere connexion effectue
-				donnee->activation3 == true;
 			}
-			else if (donnee->activation3 == true && (reponse == "Z" || reponse == "S" || reponse == "Q" || reponse == "D" || reponse == "C" || reponse == "A" || reponse == "E" || reponse == "T"))
+			else if (donnee->activation3 == true && (reponse[0] == 'Z' || reponse[0] == 'S' || reponse[0] == 'Q' || reponse[0] == 'D' || reponse[0] == 'C' || reponse[0] == 'A' || reponse[0] == 'E' || reponse[0] == 'T'))//
 			{
 				//Message debug
 				std::cout << "Serveur-confirme-commande-robot-action  " << "_" << endl;
 
 				//Appel fonction qui va determiner quel action faire(bouger robot ou envoyer donnee)
-				std::string message = robot->evaluate_action_robot(reponse);
+				std::string message = robot->evaluate_action_robot(reponse[0]);
 
 				//Message debug
 				std::cout << "Message-genere-par-serveur-choix-action-infCpateur  " << message << "_" << endl;
@@ -159,7 +163,6 @@ void TCP::creation_new_socket()
 				//Envoi message au client
 				envoi_reponse_client("-erreur");
 			}
-
 		}
 
 		//Reactivation de activation2 pour re-rentrer dans boucle
@@ -174,21 +177,17 @@ void TCP::creation_new_socket()
 		//Message debug
 		std::cout << "serveur-deco-client  " << "_" << endl;
 
-		//Si le bouton centrale est enfonce alors on ferme le socket et fin
+		//Condition pour deconnecter socket serveur
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
-			//Sortie de la boucle while principale si on appui sur bouton
+			//Sortir de la boucle principale
 			donnee->activation = true;
 
 			//Message pour le debug
-			std::cout << "deconnexion-serveur  " <<"_"<< endl;
+			std::cout << "deconnexion-serveur  " << "_" << endl;
 
 			//Fermeture socket serveur
 			close_socket_serveur();
-
-			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
-			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7v8v9.5v10
 		}
 	}
 }
@@ -204,11 +203,14 @@ std::string TCP::reception_requete_client()
 	return reponse;
 }
 
-std::string TCP::envoi_reponse_client(std::string requetes)
+void TCP::envoi_reponse_client(std::string requetes)
 {
+	std::cout << "10" << endl;
 	// Envoi de la réponse au client
 	std::string requete = requetes;
+	std::cout << "11" << endl;
 	send(sd_client, requete.c_str(), requete.size(), 0);
+	std::cout << "12" << endl;
 }
 
 void TCP::close_socket_client()
