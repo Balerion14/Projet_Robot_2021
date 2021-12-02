@@ -394,7 +394,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(100, 0, 100);
 
 		//Message debug
-		cout << "avancer" << endl;
+		cout << "avancer   _" << endl;
 
 		//Sortir du cas
 	    break;
@@ -405,7 +405,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(-100, 0, -100);
 
 		//Message debug
-		cout << "reculer" << endl;
+		cout << "reculer   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -416,7 +416,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(-100, 0, 100);
 
 		//Message debug
-		cout << "gauche" << endl;
+		cout << "gauche   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -427,7 +427,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(100, 0, -100);
 
 		//Message debug
-		cout << "droit" << endl;
+		cout << "droit   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -438,7 +438,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 0, 0);
 
 		//Message debug
-		cout << "stop" << endl;
+		cout << "stop   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -449,7 +449,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 100, 0);
 
 		//Message debug
-		cout << "monter bras" << endl;
+		cout << "monter bras   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -460,7 +460,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, -100, 0);
 
 		//Message debug
-		cout << "descendre bras" << endl;
+		cout << "descendre bras   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -471,7 +471,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 0, 0);
 
 		//Message debug
-		cout << "commande pas default stop" << endl;
+		cout << "commande pas default stop   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -497,7 +497,7 @@ std::string Robot::evaluate_action_robot(std::string requete)
 	if (requete[0] == SEND_INFOS)
 	{
 		//Message debug
-		cout << "transformation csv" << endl;
+		std::cout << "transformation-csv   _" << endl;
 
 		return transforme_CSV(Renvoi_infos_capteur());
 	}
@@ -505,7 +505,7 @@ std::string Robot::evaluate_action_robot(std::string requete)
 	else
 	{
 		//Message debug
-		cout << "action effectue" << endl;
+		std::cout << "action-effectue-dans-robot   _" << endl;
 
 		return "-action_effectue";
 	}
