@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
     //declaration variable
     int port = 1664;
