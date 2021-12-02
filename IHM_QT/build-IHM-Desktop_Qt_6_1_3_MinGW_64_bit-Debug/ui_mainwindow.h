@@ -25,7 +25,6 @@ public:
     QWidget *centralwidget;
     QLabel *label_background;
     QPushButton *up_button;
-    QPushButton *stop_button;
     QPushButton *down_button;
     QPushButton *left_button;
     QPushButton *right_button;
@@ -47,6 +46,7 @@ public:
     QLabel *labelangle_g;
     QLabel *labelangle_d;
     QLabel *labelangle;
+    QPushButton *STOP;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -69,18 +69,6 @@ public:
         font1.setFamilies({QString::fromUtf8("Power Green Narrow")});
         font1.setPointSize(13);
         up_button->setFont(font1);
-        stop_button = new QPushButton(centralwidget);
-        stop_button->setObjectName(QString::fromUtf8("stop_button"));
-        stop_button->setGeometry(QRect(1200, 450, 150, 150));
-        QFont font2;
-        font2.setFamilies({QString::fromUtf8("Power Green Narrow")});
-        font2.setPointSize(15);
-        font2.setBold(true);
-        font2.setItalic(false);
-        font2.setUnderline(false);
-        font2.setStrikeOut(false);
-        font2.setKerning(true);
-        stop_button->setFont(font2);
         down_button = new QPushButton(centralwidget);
         down_button->setObjectName(QString::fromUtf8("down_button"));
         down_button->setGeometry(QRect(1200, 625, 150, 150));
@@ -96,17 +84,17 @@ public:
         connect_button = new QPushButton(centralwidget);
         connect_button->setObjectName(QString::fromUtf8("connect_button"));
         connect_button->setGeometry(QRect(1375, 25, 150, 30));
-        QFont font3;
-        font3.setFamilies({QString::fromUtf8("Power Green")});
-        font3.setPointSize(9);
-        connect_button->setFont(font3);
+        QFont font2;
+        font2.setFamilies({QString::fromUtf8("Power Green")});
+        font2.setPointSize(9);
+        connect_button->setFont(font2);
         disconnect_button = new QPushButton(centralwidget);
         disconnect_button->setObjectName(QString::fromUtf8("disconnect_button"));
         disconnect_button->setGeometry(QRect(1375, 100, 150, 30));
-        QFont font4;
-        font4.setFamilies({QString::fromUtf8("Power Green")});
-        font4.setPointSize(8);
-        disconnect_button->setFont(font4);
+        QFont font3;
+        font3.setFamilies({QString::fromUtf8("Power Green")});
+        font3.setPointSize(8);
+        disconnect_button->setFont(font3);
         label_map = new QLabel(centralwidget);
         label_map->setObjectName(QString::fromUtf8("label_map"));
         label_map->setGeometry(QRect(50, 150, 800, 625));
@@ -117,26 +105,26 @@ public:
         txt_snirium = new QLabel(centralwidget);
         txt_snirium->setObjectName(QString::fromUtf8("txt_snirium"));
         txt_snirium->setGeometry(QRect(125, 65, 200, 50));
-        QFont font5;
-        font5.setFamilies({QString::fromUtf8("Power Green Small")});
-        font5.setPointSize(16);
-        txt_snirium->setFont(font5);
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("Power Green Small")});
+        font4.setPointSize(16);
+        txt_snirium->setFont(font4);
         txt_dst_obstacle = new QLabel(centralwidget);
         txt_dst_obstacle->setObjectName(QString::fromUtf8("txt_dst_obstacle"));
         txt_dst_obstacle->setGeometry(QRect(600, 65, 201, 50));
-        txt_dst_obstacle->setFont(font5);
+        txt_dst_obstacle->setFont(font4);
         high_Button = new QPushButton(centralwidget);
         high_Button->setObjectName(QString::fromUtf8("high_Button"));
         high_Button->setGeometry(QRect(1025, 350, 150, 75));
-        QFont font6;
-        font6.setFamilies({QString::fromUtf8("Power Green Narrow")});
-        font6.setPointSize(14);
-        font6.setBold(false);
-        high_Button->setFont(font6);
+        QFont font5;
+        font5.setFamilies({QString::fromUtf8("Power Green Narrow")});
+        font5.setPointSize(14);
+        font5.setBold(false);
+        high_Button->setFont(font5);
         low_button = new QPushButton(centralwidget);
         low_button->setObjectName(QString::fromUtf8("low_button"));
         low_button->setGeometry(QRect(1375, 350, 150, 75));
-        low_button->setFont(font6);
+        low_button->setFont(font5);
         img_angle = new QLabel(centralwidget);
         img_angle->setObjectName(QString::fromUtf8("img_angle"));
         img_angle->setGeometry(QRect(1025, 625, 150, 150));
@@ -149,35 +137,38 @@ public:
         connect_forced = new QPushButton(centralwidget);
         connect_forced->setObjectName(QString::fromUtf8("connect_forced"));
         connect_forced->setGeometry(QRect(1375, 55, 150, 30));
-        connect_forced->setFont(font3);
+        connect_forced->setFont(font2);
         connect_forced->setCheckable(false);
         input_port = new QLineEdit(centralwidget);
         input_port->setObjectName(QString::fromUtf8("input_port"));
         input_port->setGeometry(QRect(1025, 100, 350, 30));
-        QFont font7;
-        font7.setFamilies({QString::fromUtf8("Power Green")});
-        font7.setPointSize(16);
-        input_port->setFont(font7);
+        QFont font6;
+        font6.setFamilies({QString::fromUtf8("Power Green")});
+        font6.setPointSize(16);
+        input_port->setFont(font6);
         input_ip = new QLineEdit(centralwidget);
         input_ip->setObjectName(QString::fromUtf8("input_ip"));
         input_ip->setGeometry(QRect(1025, 25, 350, 30));
-        input_ip->setFont(font7);
+        input_ip->setFont(font6);
         action_status = new QLineEdit(centralwidget);
         action_status->setObjectName(QString::fromUtf8("action_status"));
         action_status->setGeometry(QRect(1025, 55, 350, 30));
-        action_status->setFont(font7);
+        action_status->setFont(font6);
         labelangle_g = new QLabel(centralwidget);
         labelangle_g->setObjectName(QString::fromUtf8("labelangle_g"));
         labelangle_g->setGeometry(QRect(1050, 710, 120, 30));
-        labelangle_g->setFont(font5);
+        labelangle_g->setFont(font4);
         labelangle_d = new QLabel(centralwidget);
         labelangle_d->setObjectName(QString::fromUtf8("labelangle_d"));
         labelangle_d->setGeometry(QRect(1400, 710, 120, 30));
-        labelangle_d->setFont(font5);
+        labelangle_d->setFont(font4);
         labelangle = new QLabel(centralwidget);
         labelangle->setObjectName(QString::fromUtf8("labelangle"));
         labelangle->setGeometry(QRect(400, 55, 75, 75));
-        labelangle->setFont(font5);
+        labelangle->setFont(font4);
+        STOP = new QPushButton(centralwidget);
+        STOP->setObjectName(QString::fromUtf8("STOP"));
+        STOP->setGeometry(QRect(1030, 270, 141, 71));
         MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
@@ -192,10 +183,6 @@ public:
         up_button->setText(QCoreApplication::translate("MainWindow", "Avancer (Forward)", nullptr));
 #if QT_CONFIG(shortcut)
         up_button->setShortcut(QCoreApplication::translate("MainWindow", "Z", nullptr));
-#endif // QT_CONFIG(shortcut)
-        stop_button->setText(QCoreApplication::translate("MainWindow", "Arr\303\252ter (Stop)", nullptr));
-#if QT_CONFIG(shortcut)
-        stop_button->setShortcut(QCoreApplication::translate("MainWindow", "Esc", nullptr));
 #endif // QT_CONFIG(shortcut)
         down_button->setText(QCoreApplication::translate("MainWindow", "Reculer (Backward)", nullptr));
 #if QT_CONFIG(shortcut)
@@ -227,12 +214,16 @@ public:
         img_posit->setText(QString());
         label_co->setText(QString());
         connect_forced->setText(QCoreApplication::translate("MainWindow", "Connection forc\303\251", nullptr));
-        input_port->setText(QCoreApplication::translate("MainWindow", "Mettre ici le port", nullptr));
-        input_ip->setText(QCoreApplication::translate("MainWindow", "Mettre ici adresse IP", nullptr));
-        action_status->setText(QCoreApplication::translate("MainWindow", "Mode force = d\303\251sactiv\303\251", nullptr));
+        input_port->setText(QString());
+        input_port->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mettre ici le port", nullptr));
+        input_ip->setText(QString());
+        input_ip->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mettre ici adresse IP", nullptr));
+        action_status->setText(QString());
+        action_status->setPlaceholderText(QCoreApplication::translate("MainWindow", "Mode force = d\303\251sactiv\303\251", nullptr));
         labelangle_g->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXX", nullptr));
         labelangle_d->setText(QCoreApplication::translate("MainWindow", "XXXXXXXXXX", nullptr));
         labelangle->setText(QCoreApplication::translate("MainWindow", "XXXXXX", nullptr));
+        STOP->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
     } // retranslateUi
 
 };

@@ -57,34 +57,6 @@
      <string>Z</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="stop_button">
-    <property name="geometry">
-     <rect>
-      <x>1200</x>
-      <y>450</y>
-      <width>150</width>
-      <height>150</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Power Green Narrow</family>
-      <pointsize>15</pointsize>
-      <weight>75</weight>
-      <italic>false</italic>
-      <bold>true</bold>
-      <underline>false</underline>
-      <strikeout>false</strikeout>
-      <kerning>true</kerning>
-     </font>
-    </property>
-    <property name="text">
-     <string>Arrêter (Stop)</string>
-    </property>
-    <property name="shortcut">
-     <string>Esc</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="down_button">
     <property name="geometry">
      <rect>
@@ -381,6 +353,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mettre ici le port</string>
     </property>
    </widget>
@@ -400,6 +375,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mettre ici adresse IP</string>
     </property>
    </widget>
@@ -419,6 +397,9 @@
      </font>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="placeholderText">
      <string>Mode force = désactivé</string>
     </property>
    </widget>
@@ -477,6 +458,19 @@
     </property>
     <property name="text">
      <string>XXXXXX</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="STOP">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>270</y>
+      <width>141</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
   </widget>

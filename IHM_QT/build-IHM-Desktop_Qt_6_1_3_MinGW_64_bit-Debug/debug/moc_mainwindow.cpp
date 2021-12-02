@@ -25,7 +25,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     const uint offsetsAndSize[50];
-    char stringdata0[505];
+    char stringdata0[498];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_MainWindow_t, stringdata0) + ofs), len 
@@ -46,16 +46,16 @@ QT_MOC_LITERAL(188, 22), // "on_high_Button_clicked"
 QT_MOC_LITERAL(211, 20), // "on_up_button_clicked"
 QT_MOC_LITERAL(232, 21), // "on_low_button_clicked"
 QT_MOC_LITERAL(254, 22), // "on_left_button_clicked"
-QT_MOC_LITERAL(277, 22), // "on_stop_button_clicked"
-QT_MOC_LITERAL(300, 23), // "on_right_button_clicked"
-QT_MOC_LITERAL(324, 22), // "on_down_button_clicked"
-QT_MOC_LITERAL(347, 23), // "on_high_Button_released"
-QT_MOC_LITERAL(371, 21), // "on_up_button_released"
-QT_MOC_LITERAL(393, 22), // "on_low_button_released"
-QT_MOC_LITERAL(416, 23), // "on_left_button_released"
-QT_MOC_LITERAL(440, 24), // "on_right_button_released"
-QT_MOC_LITERAL(465, 23), // "on_down_button_released"
-QT_MOC_LITERAL(489, 15) // "demander_trames"
+QT_MOC_LITERAL(277, 23), // "on_right_button_clicked"
+QT_MOC_LITERAL(301, 22), // "on_down_button_clicked"
+QT_MOC_LITERAL(324, 23), // "on_high_Button_released"
+QT_MOC_LITERAL(348, 21), // "on_up_button_released"
+QT_MOC_LITERAL(370, 22), // "on_low_button_released"
+QT_MOC_LITERAL(393, 23), // "on_left_button_released"
+QT_MOC_LITERAL(417, 24), // "on_right_button_released"
+QT_MOC_LITERAL(442, 23), // "on_down_button_released"
+QT_MOC_LITERAL(466, 15), // "demander_trames"
+QT_MOC_LITERAL(482, 15) // "on_STOP_clicked"
 
     },
     "MainWindow\0load_image\0\0init_image\0"
@@ -66,12 +66,12 @@ QT_MOC_LITERAL(489, 15) // "demander_trames"
     "on_disconnect_button_clicked\0"
     "on_high_Button_clicked\0on_up_button_clicked\0"
     "on_low_button_clicked\0on_left_button_clicked\0"
-    "on_stop_button_clicked\0on_right_button_clicked\0"
-    "on_down_button_clicked\0on_high_Button_released\0"
-    "on_up_button_released\0on_low_button_released\0"
-    "on_left_button_released\0"
+    "on_right_button_clicked\0on_down_button_clicked\0"
+    "on_high_Button_released\0on_up_button_released\0"
+    "on_low_button_released\0on_left_button_released\0"
     "on_right_button_released\0"
-    "on_down_button_released\0demander_trames"
+    "on_down_button_released\0demander_trames\0"
+    "on_STOP_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -157,16 +157,16 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 9: _t->on_up_button_clicked(); break;
         case 10: _t->on_low_button_clicked(); break;
         case 11: _t->on_left_button_clicked(); break;
-        case 12: _t->on_stop_button_clicked(); break;
-        case 13: _t->on_right_button_clicked(); break;
-        case 14: _t->on_down_button_clicked(); break;
-        case 15: _t->on_high_Button_released(); break;
-        case 16: _t->on_up_button_released(); break;
-        case 17: _t->on_low_button_released(); break;
-        case 18: _t->on_left_button_released(); break;
-        case 19: _t->on_right_button_released(); break;
-        case 20: _t->on_down_button_released(); break;
-        case 21: _t->demander_trames(); break;
+        case 12: _t->on_right_button_clicked(); break;
+        case 13: _t->on_down_button_clicked(); break;
+        case 14: _t->on_high_Button_released(); break;
+        case 15: _t->on_up_button_released(); break;
+        case 16: _t->on_low_button_released(); break;
+        case 17: _t->on_left_button_released(); break;
+        case 18: _t->on_right_button_released(); break;
+        case 19: _t->on_down_button_released(); break;
+        case 20: _t->demander_trames(); break;
+        case 21: _t->on_STOP_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {

@@ -49,8 +49,6 @@ private slots:
 
     void on_left_button_clicked();
 
-    void on_stop_button_clicked();
-
     void on_right_button_clicked();
 
     void on_down_button_clicked();
@@ -68,6 +66,10 @@ private slots:
     void on_down_button_released();
 
     void demander_trames();
+
+    //void remplir_bdd(QString taux_snirium, QString obstacle, QString angle_gauch, QString angle_droit, QString angle_robot);
+
+    void on_STOP_clicked();
 
 private:
     // Object instanciation part
