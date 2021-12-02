@@ -137,7 +137,7 @@ void TCP::creation_new_socket()
 				if (message == "action_effectue")
 				{
 					//Envoie reponse au client, penser à peut etre renvoyer un autre message que les commandes mais pour test c est ok
-					envoi_reponse_client(reponse);
+					envoi_reponse_client(message);
 
 					//Message pour le debug
 					std::cout << "action effectue" << endl;
