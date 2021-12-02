@@ -5,6 +5,9 @@ TCP::TCP(int port)
 	//Initialisation pointeur
 	init();
 
+	//Message debug
+	std::cout << "entrer programme" << endl;
+
 	//Save port dans classe
 	_port = port;
 	int resultat{};
@@ -40,6 +43,12 @@ TCP::TCP(int port)
 		exit -1;
 	}
 
+	//Message debug
+	std::cout << "Creation du serveur" << endl;
+
+	//Message debug
+	std::cout << port << endl;
+
 	// Création une file d'attente de connexion
 	listen(sd_serveur, 5);
 }
@@ -55,6 +64,9 @@ void TCP::creation_new_socket()
 	//Tant que le bouton centrale n'est pas enfonce
 	while (donnee->activation == false)
 	{
+		//Message debug
+		std::cout << "Attente client" << endl;
+
 		// Dès qu’un nouveau client se connecte à notre serveur,
 		// une nouvelle socket est créée pour gérer le client
 		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
@@ -62,9 +74,15 @@ void TCP::creation_new_socket()
 
 		while (donnee->activation2 == false)
 		{
+			//Message debug
+			std::cout << "Creation client" << endl;
+
 			// Réception de la requête du client(decrypte)
 			std::string _reponse = reception_requete_client();
 			reponse = _reponse;
+
+			//Message debug
+			std::cout << reponse << endl;
 
 			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
 			if (donnee->activation3 == false && reponse == "alpha-go")
@@ -130,7 +148,7 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(message_crypte);
 
 					//Message pour le debug
-					std::cout << "envoi trame" << endl;
+					std::cout << "envoi trame" << message_crypte << endl;
 				}		
 			}
 
