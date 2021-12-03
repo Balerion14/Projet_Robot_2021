@@ -8,6 +8,7 @@
 #include <QTimer>
 #include "data_received.h"
 #include <QDebug>
+#include <bdd.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,7 +41,6 @@ private slots:
 
     void on_disconnect_button_clicked();
 
-
     void on_high_Button_clicked();
 
     void on_up_button_clicked();
@@ -67,9 +67,11 @@ private slots:
 
     void demander_trames();
 
-    //void remplir_bdd(QString taux_snirium, QString obstacle, QString angle_gauch, QString angle_droit, QString angle_robot);
-
     void on_STOP_clicked();
+
+    //
+    //A voir pourquoi sa ne marche pas
+    //void remplirInfoBDD(QString nom, QString  description);
 
 private:
     // Object instanciation part
@@ -86,7 +88,13 @@ private:
     QImage *pConnected;
     QImage *pDisconnected;
     QPixmap image;
+    BDD *bdd;
 
     bool verif = true;
+
+    void gerer_deplacement_robot();
+
+    //A voir pourquoi sa ne marche pas
+    void remplir_bdd(QString x, QString y, QString angle, QString snirium, QString distance, QString date);
 };
 #endif // MAINWINDOW_H

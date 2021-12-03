@@ -15,6 +15,7 @@ public:
 
     // Separation en ;
     void separer_data(QString message_recu);
+
     QStringList _liste();
 
 private:
