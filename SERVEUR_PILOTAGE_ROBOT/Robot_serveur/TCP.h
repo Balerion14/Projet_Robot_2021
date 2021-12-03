@@ -81,7 +81,7 @@ public:
 	* Envoi du message au client de la classe "TCP".
 	* Auncun paramètre
 	*/
-	std::string envoi_reponse_client(std::string requetes);
+	void envoi_reponse_client(std::string requetes);
 
 	/**
 	* Méthode de la classe "TCP"

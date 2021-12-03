@@ -40,7 +40,7 @@ TCP::TCP(int port)
 	if (resultat < 0)
 	{
 		std::cout << "ERREUR DE PORT" << endl;
-		exit -1;
+		exit(-1);
 	}
 
 	//Message debug
@@ -65,82 +65,86 @@ void TCP::creation_new_socket()
 	while (donnee->activation == false)
 	{
 		//Message debug
-		std::cout << "Attente client" << endl;
+		std::cout << "Serveur-Attente-client" << endl;
 
 		// Dès qu’un nouveau client se connecte à notre serveur,
 		// une nouvelle socket est créée pour gérer le client
 		//accept fonction bloquante et tant qu'il n'y a personne en file d'attente, il attent ?
 		sd_client = accept(sd_serveur, NULL, NULL);
 
+	    //Tant qu'il y a un client on reste dans la boucle 
 		while (donnee->activation2 == false)
 		{
+			std::cout << "1: " << donnee->activation3 << endl;
+			std::cout << "2: " << donnee->activation2 << endl;
+
 			//Message debug
-			std::cout << "Creation client" << endl;
+			std::cout << "Serveur-trouve-client  " << endl;
 
 			// Réception de la requête du client(decrypte)
 			std::string _reponse = reception_requete_client();
 			reponse = _reponse;
 
 			//Message debug
-			std::cout << reponse << endl;
+			std::cout << "Message-recu-serveur-par-IHM:  " << reponse << "_" << endl;
 
-			//Verification de la connexion de chaque client avec une requetes specifique "alpha-go"
-			if (donnee->activation3 == false && reponse == "alpha-go")
+			//Condition pour la deconnexion du client
+			if (reponse == "deconnexion")
 			{
-					donnee->activation3 == true;
+				//Message debug
+				std::cout << "Serveur-deconnecte-client  " << "_" << endl;
 
-					//Message pour le debug
-					std::cout << "demande connexion active" << endl;
-			}
-
-			//Verification si le robot veut une connexion en continu(connexion force->IHM), (peut etre rajout de active 3 = true)
-			if (reponse == "connexion-force" && donnee->activation4 == false && donnee->activation3 == true)
-			{
-				donnee->activation4 == true;
-
-				//Message pour le debug
-				std::cout << "demande connexion force active" << endl;
-			}
-
-			//Appel methode pour savoir si on doit ou pas activer le timer ou bien si on doit le reset
-			Start_timer(reponse);
-
-			//verification si l'utilisateur appui sur deconnexion et donc qu'il m'envoi une trame == "deconnecte", on verifie aussi qu'il a bien effectue la premiere connexion 
-			if (reponse == "deconnecte" && donnee->activation3 == true)
-			{
 				//Envoyer la réponse au client(deconnecte)
-				reponse = "-deconnexion";
+				std::string envoi = "-deconnexion";
 
-				//Envoyer la réponse au client(informations capteurs)
-				envoi_reponse_client(reponse);
+				//Message debug
+				std::cout << "Message-envoye-a-IHM:  " << envoi << "_" << endl;
 
-				//Faire parler le robot en disant"deconnection"
-				robot->parler(reponse, true);
-
-				//Sortir de la boucel while
+				//sortir boucle
 				donnee->activation2 = true;
 
-				//Message pour le debug
-				std::cout << "deconnexion" << endl;
-
-				//Sortie boucle
-				break;
+				//Envoyer la réponse au client
+				envoi_reponse_client(envoi);
 			}
 
-			//on verifie aussi qu'il a bien effectue la premiere connexion 
-			else if(donnee->activation3 == true && reponse != "alpha-go" && reponse != "" && reponse != "connexion-force" && donnee->activation2 != true && (reponse == "Z" || reponse == "S" || reponse == "Q" || reponse == "D" || reponse == "C" || reponse == "A" || reponse == "E" || reponse == "T"))
+			//Condition pour la connexion du client
+			else if (reponse == "alpha-go" && donnee->activation3 == false)
 			{
-	            //Appel fonction qui va determiner quel action faire(bouger robot ou envoyer donnee)
-				std::string message = robot->evaluate_action_robot(reponse);
+				//Message debug
+				std::cout << "Serveur-confirme-connexion-client  " << "_" << endl;
+
+				//Envoyer la réponse au client(deconnecte)
+				std::string envoi = "-connection";
+
+				//Message debug
+				std::cout << "Message-envoye-a-IHM:  " << envoi << "_" << endl;
+
+				//premiere connexion effectue
+				donnee->activation3 = true;
+
+				//Envoyer la réponse au client
+				envoi_reponse_client(envoi);
+
+			}
+			else if (donnee->activation3 == true && (reponse[0] == 'Z' || reponse[0] == 'S' || reponse[0] == 'Q' || reponse[0] == 'D' || reponse[0] == 'C' || reponse[0] == 'A' || reponse[0] == 'E' || reponse[0] == 'T'))//
+			{
+				//Message debug
+				std::cout << "Serveur-confirme-commande-robot-action  " << "_" << endl;
+
+				//Appel fonction qui va determiner quel action faire(bouger robot ou envoyer donnee)
+				std::string message = robot->evaluate_action_robot(reponse[0]);
+
+				//Message debug
+				std::cout << "Message-genere-par-serveur-choix-action-infCpateur  " << message << "_" << endl;
 
 				//Si message vaut "action_effectue" alors on envoi action effectue sinon le format csv crypter
-				if (message == "action_effectue")
+				if (message == "-action_effectue")
 				{
 					//Envoie reponse au client, penser à peut etre renvoyer un autre message que les commandes mais pour test c est ok
 					envoi_reponse_client(message);
 
 					//Message pour le debug
-					std::cout << "action effectue" << endl;
+					std::cout << "action-effectue   _" << endl;
 				}
 				else
 				{
@@ -148,76 +152,16 @@ void TCP::creation_new_socket()
 					envoi_reponse_client(message_crypte);
 
 					//Message pour le debug
-					std::cout << "envoi trame" << message_crypte << endl;
-				}		
+					std::cout << "envoi-trame-crypte:  " << message_crypte << "_" << endl;
+				}
 			}
-
-			//Si reponse est egale à alpha-go et activation3 vaut true 
-			else if (donnee->activation3 == true && reponse == "alpha-go")
-			{
-				//Envoi reponse pour dire qu'il est connecter
-				reponse = "-connection";
-				envoi_reponse_client(reponse);
-
-				//Faire parler le robot en disant"connection"
-				robot->parler(reponse, true);
-
-				//Message pour le debug
-				std::cout << "connexion" << endl;
-			}
-
-			//Si il ne se passe aucune action donc que aucune des conditions n'est été utilisé alors on attend 20 seconde
 			else
 			{
-		
-				//Verification globale si il veut ou pas une connnexion en continue
-				if (donnee->activation4 == false)
-				{
+				//Message pour le debug
+				std::cout << "Envoi-message-IHM-erreur:  "<< "_" << endl;
 
-					//Calcule du temps avec le cumule
-					End_timer();
-
-					//Si le compteur est entre 1 inclut et 5 exclut alors on fait des threads attente 10s, + un message pour prevenir l'utilisateur que le socket client va etre detruit dans peu de temps pour laisser la place aux autre et eviter de surcharger la bande passante
-					if (donnee->time_total < 30)
-					{
-						//Envoi reponse client adapté entre autre, attention deconnexion proche à cause d'une inactivite
-						reponse = "-Inactivite-detecte";
-						envoi_reponse_client(reponse);
-
-						//Faire parler le robot en disant"Inactivite-detecte"
-						robot->parler(reponse, true);
-
-						//Message pour le debug
-						std::cout << "inactivite detecte" << endl;
-					}
-
-					//si jamais aucune trame n'est envoye le socket client se detruit pour eviter de surcharger la bande passante au bout d'un certains temps
-					else
-					{
-						//Envoi reponse client adapté entre autre, attention deconnexion_delai_depasse à cause d'une inactivite
-						reponse = "-deconnexion-delai-depasse";
-						envoi_reponse_client(reponse);
-
-						//Faire parler le robot en disant"deconnection"
-						robot->parler(reponse, true);
-
-						//Message pour le debug
-						std::cout << "deconnexion delai depasse" << endl;
-
-						//sortir boucle while pour detruire socket client à cause d'inactivite trop repete
-						break;
-					}
-				}
-
-				//Si c est à true alors on envoi reponse comme quoi on est bien en mode connexion force
-				else
-				{
-					reponse = "-connexion_force_active";
-					envoi_reponse_client(reponse);
-
-					//Message pour le debug
-					std::cout << "connexion force" << endl;
-				}
+				//Envoi message au client
+				envoi_reponse_client("-erreur");
 			}
 		}
 
@@ -227,37 +171,24 @@ void TCP::creation_new_socket()
 		//Reactivation de activation3 pour re faire le test de la premiere connexion
 		donnee->activation3 = false;
 
-		//Reactivation du bouton force connexion
-		donnee->activation4 = false;
-
-		//remise à 0 du mode reset du timer apres une deconnexion d'un client
-		donnee->activation5 = false;
-
-		//Remise à 0 du temps attente
-		donnee->time_total = 0;
-
 		//fermeture client pour en attendre un autre
 		close_socket_client();
 
-		//Message pour le debug
-		std::cout << "deconnexion client" << endl;
+		//Message debug
+		std::cout << "serveur-deco-client  " << "_" << endl;
 
-		//Si le bouton centrale est enfonce alors on ferme le socket et fin
+		//Condition pour deconnecter socket serveur
 		if (robot->recupererEtatBoutonCentral() == true)
 		{
-			//Sortie de la boucle while principale si on appui sur bouton
+			//Sortir de la boucle principale
 			donnee->activation = true;
 
 			//Message pour le debug
-			std::cout << "deconnexion serveur" << endl;
+			std::cout << "deconnexion-serveur  " << "_" << endl;
 
 			//Fermeture socket serveur
 			close_socket_serveur();
-
-			//voir pour afficher sur ecran robot que socket reseau serveur ferme donc on peut eteindre robot
-			//Si on le reutilise il faut le rallumer pour remettre à 0
-			//...123v4v5v6.1.1v7v8v9.5v10
-		}
+		}//v11
 	}
 }
 
@@ -272,11 +203,14 @@ std::string TCP::reception_requete_client()
 	return reponse;
 }
 
-std::string TCP::envoi_reponse_client(std::string requetes)
+void TCP::envoi_reponse_client(std::string requetes)
 {
+	std::cout << "10" << endl;
 	// Envoi de la réponse au client
 	std::string requete = requetes;
+	std::cout << "11" << endl;
 	send(sd_client, requete.c_str(), requete.size(), 0);
+	std::cout << "12" << endl;
 }
 
 void TCP::close_socket_client()

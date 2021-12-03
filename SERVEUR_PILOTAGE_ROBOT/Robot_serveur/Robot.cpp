@@ -371,22 +371,22 @@ std::array<int, 5> Robot::Renvoi_infos_capteur()//&
 
 	//Ajout des informations des capteurs dans le tableau
     //Recuperer angle moteur
-	tableau[0] = recupererPositionDuMoteur(GAUCHE);
-	tableau[1] = recupererPositionDuMoteur(DROITE);
+	tableau[0] = recupererPositionDuMoteur(GAUCHE) % 360;
+	tableau[1] = recupererPositionDuMoteur(DROITE) % 360;
 
-	//Distance obstacle(*10 : centimetre->milimètre) et toux de snirium
+	//Distance obstacle(*10 : centimetre->milimètre) et taux de snirium, % 360 pour normalise l angle
 	tableau[2] = recupererDistance() * 10;
-	tableau[3] = recupererGyroscopeAngle();
+	tableau[3] = recupererGyroscopeAngle() % 360;
 	tableau[4] = recupererLumiereAmbiante();
 
 	//Retourner tableau de valeur des capteurs
 	return tableau;
 }
 
-void Robot::do_action_robot(std::string requete)
+void Robot::do_action_robot(char requete)
 {
 	//Choix de l'action à réaliser en fonction de la requete
-	switch (requete[0])
+	switch (requete)
 	{
 	case AVANCER:
 
@@ -394,7 +394,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(100, 0, 100);
 
 		//Message debug
-		cout << "avancer" << endl;
+		cout << "avancer   _" << endl;
 
 		//Sortir du cas
 	    break;
@@ -405,7 +405,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(-100, 0, -100);
 
 		//Message debug
-		cout << "reculer" << endl;
+		cout << "reculer   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -416,7 +416,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(-100, 0, 100);
 
 		//Message debug
-		cout << "gauche" << endl;
+		cout << "gauche   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -427,7 +427,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(100, 0, -100);
 
 		//Message debug
-		cout << "droit" << endl;
+		cout << "droit   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -438,7 +438,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 0, 0);
 
 		//Message debug
-		cout << "stop" << endl;
+		cout << "stop   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -449,7 +449,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 100, 0);
 
 		//Message debug
-		cout << "monter bras" << endl;
+		cout << "monter bras   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -460,7 +460,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, -100, 0);
 
 		//Message debug
-		cout << "descendre bras" << endl;
+		cout << "descendre bras   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -471,7 +471,7 @@ void Robot::do_action_robot(std::string requete)
 		changerPuissanceMoteurs(0, 0, 0);
 
 		//Message debug
-		cout << "commande pas default stop" << endl;
+		cout << "commande pas default stop   _" << endl;
 
 		//Sortir du cas
 		break;
@@ -491,21 +491,24 @@ std::string Robot::transforme_CSV(const std::array<int, 5> & n)
 	return chaine;
 }
 
-std::string Robot::evaluate_action_robot(std::string requete)
+std::string Robot::evaluate_action_robot(char requete)
 {
 	//Si la requetes est egale à 'T' alors on appelle la methode qui recupère transforme csv et recup capteurs
-	if (requete[0] == SEND_INFOS)
+	if (requete == SEND_INFOS)
 	{
 		//Message debug
-		cout << "transformation csv" << endl;
+		std::cout << "transformation-csv   _" << endl;
 
 		return transforme_CSV(Renvoi_infos_capteur());
 	}
 	//Sinon on fait appelle à la methode qui gère les actions du robot
 	else
 	{
+		//Faire action
+		do_action_robot(requete);
+
 		//Message debug
-		cout << "action effectue" << endl;
+		std::cout << "action-effectue-dans-robot   _" << endl;
 
 		return "-action_effectue";
 	}
