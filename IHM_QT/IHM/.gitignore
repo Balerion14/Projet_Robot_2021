@@ -70,5 +70,8 @@ Thumbs.db
 # --------
 *.dll
 *.exe
+*.db
+*.sqlite
+*.sql
 ihm_robot/*.pro.user
 

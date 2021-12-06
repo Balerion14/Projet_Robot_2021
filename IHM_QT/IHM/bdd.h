@@ -10,7 +10,8 @@ class BDD
 {
     public:
         BDD();
-        void stocker_donnee_HIM(QStringList liste, QStringList liste2);
+        void stocker_donnee_robot(QStringList liste, QStringList liste2);
+        void stocker_info_robot(QString nom, QString description);
 
     private:
         QSqlDatabase bdd;

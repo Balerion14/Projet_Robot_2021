@@ -53,6 +53,7 @@ MainWindow::~MainWindow()
     delete donnee_recue;
     delete tcpSocket;
     delete ui;
+    delete bdd;
 }
 
 
@@ -69,6 +70,7 @@ void MainWindow::init_image()
     donnee_recue = new data_received();
     tcpSocket = new QTcpSocket();
     pTimer = new QTimer();
+    bdd = new BDD();
 }
 
 // This will load pictures
@@ -102,9 +104,15 @@ void MainWindow::gerer_donnees()
 {
     // Réception des données
     QByteArray reponse = tcpSocket->readAll();
+
+    //Debug
     qDebug() << "Robot => " << reponse[0];
     qDebug() << "Robot => " << reponse[1];
 
+    //Trouver moyen d'avoir la date automatiquement
+    QString date = "2021-12-03";
+
+    //Condition pour renvoi message erreur dans ihm
     if(reponse[0] == '-')
     {
         if (reponse == "-connection")
@@ -138,9 +146,11 @@ void MainWindow::gerer_donnees()
         }
     }
 
+    //Gerer affichage donne recu par le serveur
     else
     {
         ///si message crypte commence par - alors elle n'est pas traitée
+        /// Penser à gerer pour afficher la position x et y
 
         QString message = donnee_recue->decrypter_data(reponse);
         donnee_recue->separer_data(message);
@@ -159,6 +169,11 @@ void MainWindow::gerer_donnees()
         ui->labelangle_d->setText(angle_droit);
         ui->labelangle->setText(angle_robot);
         ui->txt_snirium->setText(taux_snirium);
+
+        //Gerer base de donne
+        //A voir pourquoi sa marche pas
+        //remplir_bdd("x", "y", angle_robot, taux_snirium, obstacle, date);
+        //bdd->stocker_info_robot(" ", " ");//Nom et description projet
     }
 }
 
@@ -396,9 +411,30 @@ void MainWindow::on_STOP_clicked()
     qDebug() << "IHM => " << requete << "\n";
 }
 
+//void MainWindow::remplir_bdd(QString x, QString y, QString angle, QString snirium, QString distance, QString date)
+//{
+        /*QStringList liste;
+        QStringList liste2;
 
+        //ajout valeur tableau
+        liste.append(x);
+        liste.append(y);
+        liste.append(angle);
+        liste.append(snirium);
+        liste.append(distance);
+        liste.append(date);
 
+        //ajout valeur tableau 2
+        liste2.append("x");
+        liste2.append("y");
+        liste2.append("angle");
+        liste2.append("snirium");
+        liste2.append("distance");
+        liste2.append("date");
 
+        //appel de la methode pour ajouter valeur
+        bdd->stocker_donnee_robot(liste, liste2);*/
+//}
 
 void MainWindow::afficher_erreur(QAbstractSocket::SocketError socketError)
 {
