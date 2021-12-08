@@ -23,10 +23,10 @@ void BDD::stocker_info_robot(QString nom, QString description)
     QStringList liste2;
 
     //Tableau
-    liste[0] = nom;
-    liste[1] = description;
-    liste2[0] = "nom";
-    liste2[1] = "description";
+    liste.append(nom);
+    liste.append(description);
+    liste2.append("nom");
+    liste2.append("description");
 
 
     //inserer valeur dans base de donnee en utilisant notamment la concatenation
@@ -39,6 +39,8 @@ void BDD::stocker_info_robot(QString nom, QString description)
 
 void BDD::stocker_donnee_robot(QStringList liste, QStringList liste2)//liste->value liste2->string
 {
+     qDebug() << "1";
+
     //cree un QSqlQuery
     QSqlQuery query;
 
@@ -48,7 +50,7 @@ void BDD::stocker_donnee_robot(QStringList liste, QStringList liste2)//liste->va
     {
         query.bindValue(":"+liste2[i]+"", liste[i]);
     }
-
+    qDebug() << "2";
     //gestion erreur
     if(!query.exec())
     {
