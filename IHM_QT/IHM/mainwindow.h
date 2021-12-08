@@ -41,18 +41,6 @@ private slots:
 
     void on_disconnect_button_clicked();
 
-    void on_high_Button_clicked();
-
-    void on_up_button_clicked();
-
-    void on_low_button_clicked();
-
-    void on_left_button_clicked();
-
-    void on_right_button_clicked();
-
-    void on_down_button_clicked();
-
     void on_high_Button_released();
 
     void on_up_button_released();
@@ -67,11 +55,21 @@ private slots:
 
     void demander_trames();
 
-    void on_STOP_clicked();
+    void on_up_button_pressed();
 
-    //
-    //A voir pourquoi sa ne marche pas
-    //void remplirInfoBDD(QString nom, QString  description);
+    void on_high_Button_pressed();
+
+    void on_left_button_pressed();
+
+    void on_down_button_pressed();
+
+    void on_right_button_pressed();
+
+    void on_low_button_pressed();
+
+    void on_STOP_pressed();
+
+    void remplir_bdd(QString x, QString y, QString angle, QString snirium, QString distance, QString date);
 
 private:
     // Object instanciation part
@@ -91,10 +89,5 @@ private:
     BDD *bdd;
 
     bool verif = true;
-
-    void gerer_deplacement_robot();
-
-    //A voir pourquoi sa ne marche pas
-    void remplir_bdd(QString x, QString y, QString angle, QString snirium, QString distance, QString date);
 };
 #endif // MAINWINDOW_H
