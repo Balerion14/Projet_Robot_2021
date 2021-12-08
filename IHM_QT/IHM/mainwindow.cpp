@@ -173,7 +173,8 @@ void MainWindow::gerer_donnees()
         //Gerer base de donne
         remplir_bdd("x", "y", angle_robot, taux_snirium, obstacle, date);
         //A voir pourquoi sa marche pas
-        //bdd->stocker_info_robot("vide ", "vide ");//Nom et description projet
+        bdd->stocker_info_robot("Cyborg", "Robot d'exploration");//Nom et description projet
+        qDebug() << "inf0";
     }
 }
 
