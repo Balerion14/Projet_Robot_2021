@@ -473,6 +473,58 @@
      <string>Stop</string>
     </property>
    </widget>
+   <widget class="QLabel" name="bdd_image">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>820</y>
+      <width>531</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="bdd_nom">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>890</y>
+      <width>171</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>NOM BDD</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="bdd_description">
+    <property name="geometry">
+     <rect>
+      <x>1320</x>
+      <y>890</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>DESCRIPTION BDD</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="bdd_bouton">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>830</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Envoyer BDD</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
