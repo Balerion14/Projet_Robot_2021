@@ -71,6 +71,7 @@ void MainWindow::init_image()
     tcpSocket = new QTcpSocket();
     pTimer = new QTimer();
     bdd = new BDD();
+    bdd_image = new QImage();
 }
 
 // This will load pictures
@@ -82,6 +83,7 @@ void MainWindow::load_image()
     pAngleD->load("Tableau_angle_droit.png");
     pConnected->load("connecte.png");
     pDisconnected->load("non_connecte.png");
+    bdd_image->load("fond-vert.jpg");
 }
 
 
@@ -93,10 +95,12 @@ void MainWindow::display_image()
     ui->img_angle->setPixmap(QPixmap::fromImage(*pAngleG));
     ui->img_posit->setPixmap(QPixmap::fromImage(*pAngleD));
     ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
+    ui->bdd_image->setPixmap(QPixmap::fromImage(*bdd_image));
 
     ui->connect_button->setEnabled(true);
     ui->connect_forced->setEnabled(false);
     ui->disconnect_button->setEnabled(false);
+    ui->bdd_bouton->setEnabled(false);
 }
 
 
@@ -173,7 +177,6 @@ void MainWindow::gerer_donnees()
         //Gerer base de donne
         remplir_bdd("x", "y", angle_robot, taux_snirium, obstacle, date);
         //A voir pourquoi sa marche pas
-        bdd->stocker_info_robot("Cyborg", "Robot d'exploration");//Nom et description projet
         qDebug() << "inf0";
     }
 }
@@ -188,6 +191,7 @@ void MainWindow::on_connect_button_clicked()
     ui->connect_button->setEnabled(false);
     ui->connect_forced->setEnabled(true);
     ui->disconnect_button->setEnabled(true);
+    ui->bdd_bouton->setEnabled(true);
 
     // Récupération des paramètres
     QString adresse_ip = ui->input_ip->text();
@@ -223,6 +227,8 @@ void MainWindow::on_disconnect_button_clicked()
     ui->disconnect_button->setEnabled(false);
 
     pTimer->stop();
+
+    ui->label_co->setPixmap(QPixmap::fromImage(*pDisconnected));
 
     // Message de débug
     qDebug() << "deconnecte" << "\n";
@@ -422,5 +428,22 @@ void MainWindow::afficher_erreur(QAbstractSocket::SocketError socketError)
                                      tr("Erreur : %1.")
                                      .arg(tcpSocket->errorString()));
     }
+}
+
+
+
+
+void MainWindow::on_bdd_bouton_clicked()
+{
+    ui->bdd_bouton->setEnabled(false);
+
+    qDebug() << "b" << "\n";
+
+    QString nom = ui->bdd_nom->text();
+    QString description = ui->bdd_description->text();
+
+    bdd->stocker_info_robot(nom, description);//Nom et description projet
+
+    qDebug() << "b" << "\n";
 }
 

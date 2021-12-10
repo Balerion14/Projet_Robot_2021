@@ -71,6 +71,8 @@ private slots:
 
     void remplir_bdd(QString x, QString y, QString angle, QString snirium, QString distance, QString date);
 
+    void on_bdd_bouton_clicked();
+
 private:
     // Object instanciation part
     Ui::MainWindow *ui;
@@ -85,6 +87,7 @@ private:
     QImage *pAngleG;
     QImage *pConnected;
     QImage *pDisconnected;
+    QImage *bdd_image;
     QPixmap image;
     BDD *bdd;
 

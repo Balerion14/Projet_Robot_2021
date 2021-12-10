@@ -42,10 +42,10 @@ void BDD::stocker_info_robot(QString nom, QString description)
     qDebug() << "inf3";
 
     //gestion erreur
-    if(!query.exec())
+    /*if(!query.exec())
     {
      qDebug() << query.lastError().text();
-    }
+    }*/
 
     //verification si erreur
     try{
@@ -76,10 +76,10 @@ void BDD::stocker_donnee_robot(QStringList liste, QStringList liste2)//liste->va
     }
     qDebug() << "2";
     //gestion erreur
-    if(!query.exec())
+    /*if(!query.exec())
     {
      qDebug() << query.lastError().text();
-    }
+    }*/
 
     //verification si erreur
     try{
