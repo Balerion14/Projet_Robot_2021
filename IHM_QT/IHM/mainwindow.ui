@@ -164,10 +164,10 @@
    <widget class="QLabel" name="label_map">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>150</y>
-      <width>800</width>
-      <height>625</height>
+      <x>30</x>
+      <y>140</y>
+      <width>851</width>
+      <height>841</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -182,7 +182,7 @@
      <rect>
       <x>50</x>
       <y>25</y>
-      <width>731</width>
+      <width>771</width>
       <height>100</height>
      </rect>
     </property>
@@ -206,7 +206,7 @@
      </font>
     </property>
     <property name="text">
-     <string>XXXXXXXXXXXXX</string>
+     <string>%</string>
     </property>
    </widget>
    <widget class="QLabel" name="txt_dst_obstacle">
@@ -225,15 +225,15 @@
      </font>
     </property>
     <property name="text">
-     <string>XXXXXXXXXXXXX</string>
+     <string>mm</string>
     </property>
    </widget>
    <widget class="QPushButton" name="high_Button">
     <property name="geometry">
      <rect>
-      <x>1025</x>
+      <x>1014</x>
       <y>350</y>
-      <width>150</width>
+      <width>161</width>
       <height>75</height>
      </rect>
     </property>
@@ -257,7 +257,7 @@
      <rect>
       <x>1375</x>
       <y>350</y>
-      <width>150</width>
+      <width>171</width>
       <height>75</height>
      </rect>
     </property>
@@ -407,9 +407,9 @@
     <property name="geometry">
      <rect>
       <x>1050</x>
-      <y>710</y>
+      <y>700</y>
       <width>120</width>
-      <height>30</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -419,16 +419,16 @@
      </font>
     </property>
     <property name="text">
-     <string>XXXXXXXXXX</string>
+     <string>Position x</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelangle_d">
     <property name="geometry">
      <rect>
       <x>1400</x>
-      <y>710</y>
+      <y>700</y>
       <width>120</width>
-      <height>30</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -438,7 +438,7 @@
      </font>
     </property>
     <property name="text">
-     <string>XXXXXXXXXX</string>
+     <string>Position y</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelangle">
@@ -457,7 +457,7 @@
      </font>
     </property>
     <property name="text">
-     <string>XXXXXX</string>
+     <string>Degres</string>
     </property>
    </widget>
    <widget class="QPushButton" name="STOP">
@@ -492,11 +492,11 @@
       <x>1070</x>
       <y>890</y>
       <width>171</width>
-      <height>21</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>NOM BDD</string>
+     <string>Nom BDD</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="bdd_description">
@@ -505,11 +505,11 @@
       <x>1320</x>
       <y>890</y>
       <width>191</width>
-      <height>20</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>DESCRIPTION BDD</string>
+     <string>Description  BDD</string>
     </property>
    </widget>
    <widget class="QPushButton" name="bdd_bouton">
@@ -523,6 +523,19 @@
     </property>
     <property name="text">
      <string>Envoyer BDD</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="robot">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>600</y>
+      <width>47</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

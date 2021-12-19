@@ -15,12 +15,14 @@ SOURCES += \
     bdd.cpp \
     data_received.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    robot_lego.cpp
 
 HEADERS += \
     bdd.h \
     data_received.h \
-    mainwindow.h
+    mainwindow.h \
+    robot_lego.h
 
 FORMS += \
     mainwindow.ui

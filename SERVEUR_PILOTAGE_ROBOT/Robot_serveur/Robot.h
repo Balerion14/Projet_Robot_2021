@@ -2,7 +2,7 @@
  * @file robot.h
  * @brief Définition de la classe Robot
  * @author Benaitier Loris
- * @date 25/02/2019
+ * @date 25/11/2021
  * @version 0.2
  *
  * Cette classe Robot formera une sur-couche à l'ensemble des classes ev3dev
