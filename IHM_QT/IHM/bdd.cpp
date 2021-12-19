@@ -1,3 +1,4 @@
+//Importation de bibliotèque
 #include "bdd.h"
 
 BDD::BDD()

@@ -2,7 +2,7 @@
  * @file hello_world.cpp
  * @brief Le classique des classiques
  * @author Benaitier Loris
- * @date 25/02/2019
+ * @date 18/12/2021
  * @version 0.2
  *
  * Affiche un message dans la console.
@@ -24,7 +24,7 @@ int main()
     TCP serveur(port);
 
     //Lancement socket serveur
-    serveur.creation_new_socket();
+    serveur.wait_client();
     
     // Fin du programme
     return 0;

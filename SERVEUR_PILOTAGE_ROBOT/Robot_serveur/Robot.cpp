@@ -377,7 +377,7 @@ std::array<int, 5> Robot::Renvoi_infos_capteur()//&
 	//Distance obstacle(*10 : centimetre->milimètre) et taux de snirium, % 360 pour normalise l angle
 	tableau[2] = recupererDistance() * 10;
 	tableau[3] = recupererGyroscopeAngle() % 360;
-	tableau[4] = recupererLumiereAmbiante();
+	tableau[4] = recupererLumiereReflechie();
 
 	//Retourner tableau de valeur des capteurs
 	return tableau;

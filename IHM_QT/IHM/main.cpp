@@ -1,3 +1,4 @@
+//Importation de bibliotèque
 #include "mainwindow.h"
 
 #include <QApplication>

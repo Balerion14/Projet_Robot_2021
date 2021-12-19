@@ -146,8 +146,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ev3dev.h" />
+    <ClInclude Include="file.h" />
+    <ClInclude Include="liste.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="TCP.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="file.inl" />
+    <None Include="liste.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
